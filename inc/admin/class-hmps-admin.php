@@ -125,19 +125,17 @@ final class HMPS_Admin {
 		$dir = isset( $merged['packages_base_dir'] ) ? (string) $merged['packages_base_dir'] : '';
 		$dir = wp_normalize_path( trim( $dir ) );
 
-		// Prefer plugin-local demo-paketleri if exists (portable demo bundles).
-		$plugin_local = wp_normalize_path( trailingslashit( HMPS_PLUGIN_DIR ) . 'demo-paketleri' );
-
 		if ( empty( $dir ) || ! is_dir( $dir ) ) {
-			if ( is_dir( $plugin_local ) ) {
-				$merged['packages_base_dir'] = $plugin_local;
-			} else {
-				$uploads = wp_upload_dir();
-				$base    = isset( $uploads['basedir'] ) ? $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
-				$merged['packages_base_dir'] = trailingslashit( wp_normalize_path( $base ) ) . 'hmps-packages';
-			}
+			$uploads = wp_upload_dir();
+			$base    = isset( $uploads['basedir'] ) ? $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
+			$merged['packages_base_dir'] = trailingslashit( wp_normalize_path( $base ) ) . 'hmpro-demo-packages';
 		} else {
 			$merged['packages_base_dir'] = $dir;
+		}
+
+		// Ensure directory exists (safe no-op if already exists).
+		if ( ! is_dir( $merged['packages_base_dir'] ) ) {
+			wp_mkdir_p( $merged['packages_base_dir'] );
 		}
 
 		return $merged;
@@ -154,6 +152,11 @@ final class HMPS_Admin {
 			// Keep as filesystem path; normalize slashes.
 			$dir = wp_normalize_path( $dir );
 			$out['packages_base_dir'] = $dir;
+		}
+
+		// Ensure directory exists on save.
+		if ( ! empty( $out['packages_base_dir'] ) && ! is_dir( $out['packages_base_dir'] ) ) {
+			wp_mkdir_p( $out['packages_base_dir'] );
 		}
 
 		if ( isset( $input['preview_base_slug'] ) ) {
@@ -325,9 +328,9 @@ final class HMPS_Admin {
 		printf(
 			'<input type="text" class="regular-text" name="hmps_settings[packages_base_dir]" value="%s" placeholder="%s" />',
 			esc_attr( $s['packages_base_dir'] ),
-			esc_attr__( 'e.g. /var/www/.../wp-content/uploads/hmps-packages', 'hm-pro-showcase' )
+			esc_attr__( 'e.g. /var/www/.../wp-content/uploads/hmpro-demo-packages', 'hm-pro-showcase' )
 		);
-		echo '<p class="description">' . esc_html__( 'Filesystem directory where demo packages live (each package is a folder).', 'hm-pro-showcase' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Single filesystem directory where demo packages live (each package is a folder with demo.json). This directory is used for BOTH showcase listing and demo preview.', 'hm-pro-showcase' ) . '</p>';
 	}
 
 	public static function field_preview_base_slug() : void {
