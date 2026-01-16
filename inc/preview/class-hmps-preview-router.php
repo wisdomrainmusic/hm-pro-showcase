@@ -14,8 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Rewrite:
  *   ^demo/([^/]+)/?(.*)?$ -> index.php?hmps_demo=$1&hmps_path=$2
  *
- * Then we translate request into WordPress native routing by setting pagename.
- * Woo/endpoint rewriting will be handled in later commits.
+ * Then we translate request into a template resolution.
  */
 final class HMPS_Preview_Router {
 	const QV_DEMO = 'hmps_demo';
@@ -60,70 +59,81 @@ final class HMPS_Preview_Router {
 	}
 
 	/**
-	 * Translate /demo/<slug>/<path> into a WP-native request.
-	 *
-	 * For Commit 5 we map to "pagename" so pages load correctly.
-	 * Later commits will extend this to Woo endpoints, post links, term links, etc.
+	 * Translate /demo/<slug>/<path> into a template resolution by demo content.
 	 */
-	public static function filter_request( array $query_vars ) : array {
-		$demo = isset( $query_vars[ self::QV_DEMO ] ) ? sanitize_title( (string) $query_vars[ self::QV_DEMO ] ) : '';
-		if ( ! $demo ) {
-			return $query_vars;
+	public static function resolve_template() : void {
+		$demo_slug = get_query_var( self::QV_DEMO );
+		$demo_slug = $demo_slug ? sanitize_title( (string) $demo_slug ) : '';
+		if ( ! $demo_slug ) {
+			return;
 		}
 
-		// Load settings + package to find front_page_slug.
+		$path = get_query_var( self::QV_PATH );
+		$path = $path ? trim( (string) $path, '/' ) : '';
+
 		$settings = self::get_settings_safe();
 		$repo     = new HMPS_Package_Repository( (string) $settings['packages_base_dir'] );
-		$pkg      = $repo->get_package( $demo );
-
-		if ( ! is_array( $pkg ) ) {
-			// Unknown demo -> 404.
-			$query_vars['error'] = '404';
-			return $query_vars;
+		$package  = $repo->get_package( $demo_slug );
+		if ( ! is_array( $package ) ) {
+			status_header( 404 );
+			nocache_headers();
+			echo esc_html__( 'Demo page not found.', 'hm-pro-showcase' );
+			exit;
 		}
 
-		$path = isset( $query_vars[ self::QV_PATH ] ) ? (string) $query_vars[ self::QV_PATH ] : '';
-		$path = trim( $path );
-		$path = ltrim( $path, '/' );
-		$path = rtrim( $path, '/' );
-
-		if ( '' === $path ) {
-			$front = (string) ( $pkg['front_page_slug'] ?? '' );
-			$front = sanitize_title( $front );
-			$path  = $front ? $front : '';
-		}
-
-		// Mark demo context globally (used later for link rewriting/cookies).
-		$GLOBALS['hmps_demo_active']  = $demo;
-		$GLOBALS['hmps_demo_package'] = $pkg;
-
-		// Core translation: map to a page path.
-		// This supports nested pages like "shop/checkout" (as a pagename),
-		// but Woo endpoints will need additional handling later.
 		if ( $path ) {
-			$query_vars['pagename'] = $path;
+			$resolved_slug = sanitize_title( $path );
 		} else {
-			// If no path and no front page slug, fallback to home.
-			// We do this by setting 'pagename' empty and letting WP load front page.
-			unset( $query_vars['pagename'] );
+			$front_slug    = sanitize_title( (string) ( $package['front_page_slug'] ?? '' ) );
+			$resolved_slug = $front_slug ? $front_slug : 'ana-sayfa';
 		}
 
-		// Prevent accidental canonical redirect away from our demo base (handled later more deeply).
-		add_filter( 'redirect_canonical', array( __CLASS__, 'maybe_disable_canonical' ), 10, 2 );
+		// Final WP page slug = <demo-slug>-<resolved-slug>.
+		$page_slug = sanitize_title( $demo_slug . '-' . $resolved_slug );
 
-		return $query_vars;
-	}
-
-	public static function maybe_disable_canonical( $redirect_url, $requested_url ) {
-		$demo = self::current_demo_slug();
-		if ( $demo ) {
-			return false;
+		$page = get_page_by_path( $page_slug, OBJECT, 'page' );
+		if ( ! $page ) {
+			status_header( 404 );
+			nocache_headers();
+			echo esc_html__( 'Demo page not found.', 'hm-pro-showcase' );
+			exit;
 		}
-		return $redirect_url;
-	}
 
-	public static function current_demo_slug() : string {
-		return isset( $GLOBALS['hmps_demo_active'] ) ? (string) $GLOBALS['hmps_demo_active'] : '';
+		// Force WP main query to load this page.
+		global $wp_query;
+		$wp_query->init();
+		$wp_query->is_home       = false;
+		$wp_query->is_front_page = false;
+		$wp_query->is_page       = true;
+		$wp_query->is_singular   = true;
+		$wp_query->is_404        = false;
+
+		$wp_query->queried_object    = $page;
+		$wp_query->queried_object_id = (int) $page->ID;
+		$wp_query->post              = $page;
+		$wp_query->posts             = array( $page );
+		$wp_query->post_count        = 1;
+		$wp_query->found_posts       = 1;
+		$wp_query->max_num_pages     = 1;
+
+		global $post;
+		$post = $page;
+		setup_postdata( $post );
+
+		$template = get_page_template();
+		if ( ! $template ) {
+			$template = get_single_template();
+		}
+		if ( ! $template ) {
+			$template = get_index_template();
+		}
+
+		if ( $template ) {
+			include $template;
+		} else {
+			echo apply_filters( 'the_content', $page->post_content );
+		}
+		exit;
 	}
 
 	private static function get_preview_base_slug() : string {

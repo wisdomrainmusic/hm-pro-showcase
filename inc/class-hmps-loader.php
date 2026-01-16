@@ -12,7 +12,7 @@ final class HMPS_Loader {
 		// Preview router must be available both admin+frontend.
 		add_action( 'init', array( 'HMPS_Preview_Router', 'register' ) );
 		add_filter( 'query_vars', array( 'HMPS_Preview_Router', 'register_query_vars' ) );
-		add_filter( 'request', array( 'HMPS_Preview_Router', 'filter_request' ), 1 );
+		add_action( 'template_redirect', array( 'HMPS_Preview_Router', 'resolve_template' ), 0 );
 
 		if ( is_admin() ) {
 			require_once HMPS_PLUGIN_DIR . 'inc/admin/class-hmps-admin.php';
