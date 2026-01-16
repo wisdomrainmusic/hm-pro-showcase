@@ -12,6 +12,9 @@ final class HMPS_Loader {
 			require_once HMPS_PLUGIN_DIR . 'inc/admin/class-hmps-admin.php';
 			add_action( 'admin_menu', array( 'HMPS_Admin', 'register_menu' ) );
 			add_action( 'admin_init', array( 'HMPS_Admin', 'register_settings' ) );
+		} else {
+			require_once HMPS_PLUGIN_DIR . 'inc/frontend/class-hmps-shortcodes.php';
+			add_action( 'init', array( 'HMPS_Shortcodes', 'register' ) );
 		}
 	}
 }
