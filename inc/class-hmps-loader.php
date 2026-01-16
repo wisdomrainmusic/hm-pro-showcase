@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 final class HMPS_Loader {
 	public function init() : void {
+		require_once HMPS_PLUGIN_DIR . 'inc/packages/class-hmps-package-repository.php';
+
 		if ( is_admin() ) {
 			require_once HMPS_PLUGIN_DIR . 'inc/admin/class-hmps-admin.php';
 			add_action( 'admin_menu', array( 'HMPS_Admin', 'register_menu' ) );
