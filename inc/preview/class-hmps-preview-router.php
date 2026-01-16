@@ -59,6 +59,34 @@ final class HMPS_Preview_Router {
 	}
 
 	/**
+	 * Determine the expected WP page slug for a demo+resolved slug.
+	 * Primary: <demo>-<slug> (namespaced)
+	 * Fallback: <slug> (for legacy imports until namespacing is enabled)
+	 */
+	private static function find_demo_page( string $demo_slug, string $resolved_slug ) {
+		$demo_slug     = sanitize_title( $demo_slug );
+		$resolved_slug = sanitize_title( $resolved_slug );
+		if ( ! $resolved_slug ) {
+			return null;
+		}
+
+		// Namespaced first
+		$page_slug = sanitize_title( $demo_slug . '-' . $resolved_slug );
+		$page      = get_page_by_path( $page_slug, OBJECT, 'page' );
+		if ( $page ) {
+			return $page;
+		}
+
+		// Legacy fallback (no namespacing yet)
+		$page = get_page_by_path( $resolved_slug, OBJECT, 'page' );
+		if ( $page ) {
+			return $page;
+		}
+
+		return null;
+	}
+
+	/**
 	 * Translate /demo/<slug>/<path> into a template resolution by demo content.
 	 */
 	public static function resolve_template() : void {
@@ -77,7 +105,7 @@ final class HMPS_Preview_Router {
 		if ( ! is_array( $package ) ) {
 			status_header( 404 );
 			nocache_headers();
-			echo esc_html__( 'Demo page not found.', 'hm-pro-showcase' );
+			echo esc_html__( 'Demo package not found.', 'hm-pro-showcase' );
 			exit;
 		}
 
@@ -88,10 +116,7 @@ final class HMPS_Preview_Router {
 			$resolved_slug = $front_slug ? $front_slug : 'ana-sayfa';
 		}
 
-		// Final WP page slug = <demo-slug>-<resolved-slug>.
-		$page_slug = sanitize_title( $demo_slug . '-' . $resolved_slug );
-
-		$page = get_page_by_path( $page_slug, OBJECT, 'page' );
+		$page = self::find_demo_page( $demo_slug, $resolved_slug );
 		if ( ! $page ) {
 			status_header( 404 );
 			nocache_headers();
