@@ -179,9 +179,56 @@ final class HMPS_Admin {
 			wp_die( esc_html__( 'Access denied.', 'hm-pro-showcase' ) );
 		}
 
+		$s    = self::get_settings();
+		$repo = new HMPS_Package_Repository( $s['packages_base_dir'] );
+		$list = $repo->list_packages();
+
 		echo '<div class="wrap">';
 		echo '<h1>' . esc_html__( 'HM Pro Showcase', 'hm-pro-showcase' ) . '</h1>';
-		echo '<p>' . esc_html__( 'Plugin is active. Next commits will add package reading, showcase UI, and preview router.', 'hm-pro-showcase' ) . '</p>';
+		echo '<p>' . esc_html__( 'Plugin is active. Package reading is enabled in this commit.', 'hm-pro-showcase' ) . '</p>';
+
+		echo '<h2 style="margin-top:16px;">' . esc_html__( 'Detected Packages', 'hm-pro-showcase' ) . '</h2>';
+
+		if ( empty( $list ) ) {
+			echo '<p>' . esc_html__( 'No packages found yet. Create a folder under the Packages base directory with a demo.json file.', 'hm-pro-showcase' ) . '</p>';
+		} else {
+			echo '<table class="widefat striped" style="max-width: 1100px;">';
+			echo '<thead><tr>';
+			echo '<th style="width:180px;">' . esc_html__( 'Slug', 'hm-pro-showcase' ) . '</th>';
+			echo '<th>' . esc_html__( 'Title', 'hm-pro-showcase' ) . '</th>';
+			echo '<th style="width:220px;">' . esc_html__( 'Categories', 'hm-pro-showcase' ) . '</th>';
+			echo '<th style="width:220px;">' . esc_html__( 'Front page slug', 'hm-pro-showcase' ) . '</th>';
+			echo '<th style="width:120px;">' . esc_html__( 'Cover', 'hm-pro-showcase' ) . '</th>';
+			echo '</tr></thead>';
+			echo '<tbody>';
+
+			foreach ( $list as $pkg ) {
+				$cats       = isset( $pkg['categories'] ) && is_array( $pkg['categories'] ) ? implode( ', ', $pkg['categories'] ) : '';
+				$front      = (string) ( $pkg['front_page_slug'] ?? '' );
+				$cover_url  = (string) ( $pkg['cover']['url'] ?? '' );
+				$cover_file = (string) ( $pkg['cover']['file'] ?? '' );
+
+				echo '<tr>';
+				echo '<td><code>' . esc_html( (string) ( $pkg['slug'] ?? '' ) ) . '</code></td>';
+				echo '<td>' . esc_html( (string) ( $pkg['title'] ?? '' ) ) . '</td>';
+				echo '<td>' . esc_html( $cats ) . '</td>';
+				echo '<td><code>' . esc_html( $front ) . '</code></td>';
+				echo '<td>';
+				if ( $cover_url ) {
+					echo '<img src="' . esc_url( $cover_url ) . '" alt="" style="width:72px;height:auto;border-radius:6px;display:block;" />';
+				} elseif ( $cover_file ) {
+					echo '<code>' . esc_html( $cover_file ) . '</code>';
+				} else {
+					echo '<span style="opacity:.7;">' . esc_html__( 'none', 'hm-pro-showcase' ) . '</span>';
+				}
+				echo '</td>';
+				echo '</tr>';
+			}
+
+			echo '</tbody>';
+			echo '</table>';
+		}
+
 		echo '</div>';
 	}
 
@@ -217,6 +264,21 @@ final class HMPS_Admin {
 		$exists = is_dir( $dir );
 		$writable = $exists ? is_writable( $dir ) : false;
 
+		// Package quick stats.
+		$repo  = new HMPS_Package_Repository( $dir );
+		$list  = $repo->list_packages();
+		$count = is_array( $list ) ? count( $list ) : 0;
+		$base_url = '';
+		if ( method_exists( $repo, '__construct' ) ) {
+			// base_url is internal; we can infer from first cover url if present.
+			foreach ( $list as $pkg ) {
+				if ( ! empty( $pkg['cover']['url'] ) ) {
+					$base_url = preg_replace( '#/[^/]+/[^/]+$#', '', (string) $pkg['cover']['url'] );
+					break;
+				}
+			}
+		}
+
 		echo '<div class="wrap">';
 		echo '<h1>' . esc_html__( 'Diagnostics', 'hm-pro-showcase' ) . '</h1>';
 
@@ -226,6 +288,7 @@ final class HMPS_Admin {
 		echo '<tr><th>' . esc_html__( 'Packages base directory', 'hm-pro-showcase' ) . '</th><td><code>' . esc_html( $dir ) . '</code></td></tr>';
 		echo '<tr><th>' . esc_html__( 'Directory exists', 'hm-pro-showcase' ) . '</th><td>' . esc_html( $exists ? 'yes' : 'no' ) . '</td></tr>';
 		echo '<tr><th>' . esc_html__( 'Directory writable', 'hm-pro-showcase' ) . '</th><td>' . esc_html( $writable ? 'yes' : 'no' ) . '</td></tr>';
+		echo '<tr><th>' . esc_html__( 'Packages detected', 'hm-pro-showcase' ) . '</th><td>' . esc_html( (string) $count ) . '</td></tr>';
 		echo '<tr><th>' . esc_html__( 'Preview base slug', 'hm-pro-showcase' ) . '</th><td><code>' . esc_html( $s['preview_base_slug'] ) . '</code></td></tr>';
 		echo '</tbody>';
 		echo '</table>';
