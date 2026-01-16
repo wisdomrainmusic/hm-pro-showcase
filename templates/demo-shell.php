@@ -25,7 +25,7 @@ $page = array(
 	'content' => '',
 );
 if ( $package_dir && is_dir( $package_dir ) ) {
-	$page = HMPS_Virtual_Pages::render_page_html( $package_dir, $page_slug );
+	$page = HMPS_Virtual_Pages::render_page_html( $package_dir, $page_slug, $slug );
 }
 
 // Render using active theme header/footer for visual consistency.
@@ -35,6 +35,12 @@ get_header();
 <meta name="robots" content="noindex,nofollow" />
 
 <div style="max-width:1200px;margin:24px auto;padding:0 18px;">
+	<?php
+	// Showcase page (front list) – default /a1/ but can be overridden later via setting.
+	$showcase_url = home_url( '/a1/' );
+	// Exit can go to homepage now; later we can redirect to pricing/product.
+	$exit_url = home_url( '/' );
+	?>
 	<div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px;">
 		<div>
 			<div style="font-size:13px;color:#666;margin-bottom:4px;">
@@ -45,10 +51,10 @@ get_header();
 			</h1>
 		</div>
 		<div style="display:flex;gap:10px;align-items:center;">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
+			<a href="<?php echo esc_url( $exit_url ); ?>" style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
 				<?php echo esc_html__( 'Exit', 'hm-pro-showcase' ); ?>
 			</a>
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
+			<a href="<?php echo esc_url( $showcase_url ); ?>" style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
 				<?php echo esc_html__( 'Showcase', 'hm-pro-showcase' ); ?>
 			</a>
 		</div>
