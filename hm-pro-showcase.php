@@ -65,8 +65,21 @@ function hmps_activate() : void {
 	}
 
 	update_option( 'hmps_settings', $merged, false );
+
+	require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-router.php';
+	HMPS_Preview_Router::activate();
 }
 register_activation_hook( __FILE__, 'hmps_activate' );
+
+/**
+ * Deactivation: flush rewrite rules.
+ */
+function hmps_deactivate() : void {
+	require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-router.php';
+	HMPS_Preview_Router::deactivate();
+}
+
+register_deactivation_hook( __FILE__, 'hmps_deactivate' );
 
 // Bootstrap on plugins_loaded.
 add_action(

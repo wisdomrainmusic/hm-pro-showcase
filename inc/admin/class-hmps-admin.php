@@ -484,7 +484,7 @@ final class HMPS_Admin {
 		}
 
 		$s = self::get_settings();
-		$dir = $s['packages_base_dir'];
+		$dir = (string) $s['packages_base_dir'];
 		$exists = is_dir( $dir );
 		$writable = $exists ? is_writable( $dir ) : false;
 
@@ -503,6 +503,21 @@ final class HMPS_Admin {
 			}
 		}
 
+		// Rewrite diagnostics (Commit 5+).
+		$rewrite_rules = get_option( 'rewrite_rules', array() );
+		$preview_base  = sanitize_title( (string) $s['preview_base_slug'] );
+		if ( ! $preview_base ) {
+			$preview_base = 'demo';
+		}
+		$pattern = '^' . $preview_base . '/([^/]+)/?(.*)?$';
+		$rewrite_ok = is_array( $rewrite_rules ) && array_key_exists( $pattern, $rewrite_rules );
+
+		$sample_demo = '';
+		if ( ! empty( $list ) && ! empty( $list[0]['slug'] ) ) {
+			$sample_demo = sanitize_title( (string) $list[0]['slug'] );
+		}
+		$sample_url = $sample_demo ? home_url( '/' . $preview_base . '/' . $sample_demo . '/' ) : '';
+
 		echo '<div class="wrap">';
 		echo '<h1>' . esc_html__( 'Diagnostics', 'hm-pro-showcase' ) . '</h1>';
 
@@ -514,10 +529,14 @@ final class HMPS_Admin {
 		echo '<tr><th>' . esc_html__( 'Directory writable', 'hm-pro-showcase' ) . '</th><td>' . esc_html( $writable ? 'yes' : 'no' ) . '</td></tr>';
 		echo '<tr><th>' . esc_html__( 'Packages detected', 'hm-pro-showcase' ) . '</th><td>' . esc_html( (string) $count ) . '</td></tr>';
 		echo '<tr><th>' . esc_html__( 'Preview base slug', 'hm-pro-showcase' ) . '</th><td><code>' . esc_html( $s['preview_base_slug'] ) . '</code></td></tr>';
+		echo '<tr><th>' . esc_html__( 'Preview rewrite active', 'hm-pro-showcase' ) . '</th><td>' . esc_html( $rewrite_ok ? 'yes' : 'no' ) . '</td></tr>';
+		if ( $sample_url ) {
+			echo '<tr><th>' . esc_html__( 'Sample preview URL', 'hm-pro-showcase' ) . '</th><td><a href="' . esc_url( $sample_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $sample_url ) . '</a></td></tr>';
+		}
 		echo '</tbody>';
 		echo '</table>';
 
-		echo '<p style="margin-top:12px;">' . esc_html__( 'Rewrite/router checks will appear after Commit 5.', 'hm-pro-showcase' ) . '</p>';
+		echo '<p style="margin-top:12px;">' . esc_html__( 'If rewrite is not active, re-save Permalinks or deactivate/activate the plugin to flush rules.', 'hm-pro-showcase' ) . '</p>';
 		echo '</div>';
 	}
 
