@@ -4,6 +4,52 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 final class HMPS_Virtual_Pages {
+	public static function preview_base_slug() : string {
+		$opt  = get_option( 'hmps_settings', array() );
+		$slug = isset( $opt['preview_base_slug'] ) ? (string) $opt['preview_base_slug'] : 'demo';
+		$slug = sanitize_title( $slug );
+		return $slug ? $slug : 'demo';
+	}
+
+	public static function rewrite_internal_links( string $html, string $demo_slug ) : string {
+		$demo_slug = sanitize_title( $demo_slug );
+		if ( ! $demo_slug || ! $html ) {
+			return $html;
+		}
+
+		$base = '/' . self::preview_base_slug() . '/' . $demo_slug . '/';
+
+		// Rewrite root-relative href="/x/" to href="/demo/<slug>/x/"
+		$html = preg_replace_callback(
+			'#href=(["\'])(/[^"\']*)\1#i',
+			function( $m ) use ( $base ) {
+				$q = $m[1];
+				$u = $m[2];
+
+				// Keep assets and admin URLs untouched.
+				if ( preg_match( '#^/(wp-admin|wp-login\.php|wp-content|wp-includes)/#i', $u ) ) {
+					return 'href=' . $q . $u . $q;
+				}
+
+				// Avoid double-prefixing if already in demo.
+				if ( preg_match( '#^/demo/#i', $u ) ) {
+					return 'href=' . $q . $u . $q;
+				}
+
+				$u = ltrim( $u, '/' );
+				return 'href=' . $q . $base . $u . $q;
+			},
+			$html
+		);
+
+		// Rewrite site absolute URLs to demo URLs (same host).
+		$home = home_url( '/' );
+		$home = rtrim( $home, '/' );
+		$html = str_replace( $home . '/', $home . $base, $html );
+
+		return $html;
+	}
+
 	/**
 	 * Load pages.json from a package directory and return a map keyed by slug.
 	 *
@@ -82,7 +128,7 @@ final class HMPS_Virtual_Pages {
 	/**
 	 * Render a virtual page from pages.json.
 	 */
-	public static function render_page_html( string $package_dir, string $page_slug ) : array {
+	public static function render_page_html( string $package_dir, string $page_slug, string $demo_slug ) : array {
 		$page_slug = sanitize_title( $page_slug );
 		$map       = self::load_pages_map( $package_dir );
 
@@ -101,6 +147,9 @@ final class HMPS_Virtual_Pages {
 		// (We will add internal link rewriting in the next commit.)
 		$content = do_shortcode( $content );
 		$content = apply_filters( 'the_content', $content );
+
+		// Keep navigation inside demo scope.
+		$content = self::rewrite_internal_links( $content, $demo_slug );
 
 		return array(
 			'found'   => true,
