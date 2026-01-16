@@ -121,11 +121,23 @@ final class HMPS_Admin {
 		}
 		$merged = array_merge( $defaults, $opt );
 
-		// Fill base dir if empty.
-		if ( empty( $merged['packages_base_dir'] ) ) {
-			$uploads = wp_upload_dir();
-			$base    = isset( $uploads['basedir'] ) ? $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
-			$merged['packages_base_dir'] = trailingslashit( $base ) . 'hmps-packages';
+		// Fill base dir if empty OR invalid.
+		$dir = isset( $merged['packages_base_dir'] ) ? (string) $merged['packages_base_dir'] : '';
+		$dir = wp_normalize_path( trim( $dir ) );
+
+		// Prefer plugin-local demo-paketleri if exists (portable demo bundles).
+		$plugin_local = wp_normalize_path( trailingslashit( HMPS_PLUGIN_DIR ) . 'demo-paketleri' );
+
+		if ( empty( $dir ) || ! is_dir( $dir ) ) {
+			if ( is_dir( $plugin_local ) ) {
+				$merged['packages_base_dir'] = $plugin_local;
+			} else {
+				$uploads = wp_upload_dir();
+				$base    = isset( $uploads['basedir'] ) ? $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
+				$merged['packages_base_dir'] = trailingslashit( wp_normalize_path( $base ) ) . 'hmps-packages';
+			}
+		} else {
+			$merged['packages_base_dir'] = $dir;
 		}
 
 		return $merged;

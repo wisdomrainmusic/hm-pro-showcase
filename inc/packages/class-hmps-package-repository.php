@@ -35,6 +35,16 @@ final class HMPS_Package_Repository {
 				$this->base_url = $baseurl . ( $rel ? '/' . $rel : '' );
 			}
 		}
+
+		// If base_dir is inside plugin directory, build plugin URL (covers demo-paketleri).
+		if ( ! $this->base_url ) {
+			$plugin_dir = wp_normalize_path( untrailingslashit( HMPS_PLUGIN_DIR ) );
+			if ( 0 === strpos( $this->base_dir, $plugin_dir ) ) {
+				$rel = ltrim( substr( $this->base_dir, strlen( $plugin_dir ) ), '/' );
+				// HMPS_PLUGIN_URL ends with slash
+				$this->base_url = untrailingslashit( (string) HMPS_PLUGIN_URL ) . ( $rel ? '/' . $rel : '' );
+			}
+		}
 	}
 
 	/**
