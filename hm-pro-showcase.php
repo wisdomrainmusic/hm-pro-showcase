@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HM Pro Showcase
  * Description: Showcase + navigable demo preview system for HM Pro theme packages.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Wisdom Rain Music
  * License: GPLv2 or later
  * Text Domain: hm-pro-showcase
@@ -57,11 +57,16 @@ function hmps_activate() : void {
 
 	$merged = array_merge( $defaults, $existing );
 
-	// If base dir empty, set to uploads/hmps-packages.
+	// If base dir empty, set to uploads/hmpro-demo-packages (single canonical folder).
 	if ( empty( $merged['packages_base_dir'] ) ) {
 		$uploads = wp_upload_dir();
 		$base    = isset( $uploads['basedir'] ) ? $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
-		$merged['packages_base_dir'] = trailingslashit( $base ) . 'hmps-packages';
+		$merged['packages_base_dir'] = trailingslashit( wp_normalize_path( $base ) ) . 'hmpro-demo-packages';
+	}
+
+	// Ensure directory exists.
+	if ( ! is_dir( $merged['packages_base_dir'] ) ) {
+		wp_mkdir_p( $merged['packages_base_dir'] );
 	}
 
 	update_option( 'hmps_settings', $merged, false );

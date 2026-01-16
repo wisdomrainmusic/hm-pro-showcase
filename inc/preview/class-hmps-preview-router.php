@@ -59,34 +59,6 @@ final class HMPS_Preview_Router {
 	}
 
 	/**
-	 * Determine the expected WP page slug for a demo+resolved slug.
-	 * Primary: <demo>-<slug> (namespaced)
-	 * Fallback: <slug> (for legacy imports until namespacing is enabled)
-	 */
-	private static function find_demo_page( string $demo_slug, string $resolved_slug ) {
-		$demo_slug     = sanitize_title( $demo_slug );
-		$resolved_slug = sanitize_title( $resolved_slug );
-		if ( ! $resolved_slug ) {
-			return null;
-		}
-
-		// Namespaced first
-		$page_slug = sanitize_title( $demo_slug . '-' . $resolved_slug );
-		$page      = get_page_by_path( $page_slug, OBJECT, 'page' );
-		if ( $page ) {
-			return $page;
-		}
-
-		// Legacy fallback (no namespacing yet)
-		$page = get_page_by_path( $resolved_slug, OBJECT, 'page' );
-		if ( $page ) {
-			return $page;
-		}
-
-		return null;
-	}
-
-	/**
 	 * Translate /demo/<slug>/<path> into a template resolution by demo content.
 	 */
 	public static function resolve_template() : void {
@@ -109,55 +81,28 @@ final class HMPS_Preview_Router {
 			exit;
 		}
 
-		if ( $path ) {
-			$resolved_slug = sanitize_title( $path );
-		} else {
-			$front_slug    = sanitize_title( (string) ( $package['front_page_slug'] ?? '' ) );
-			$resolved_slug = $front_slug ? $front_slug : 'ana-sayfa';
-		}
+		// Takeover: do NOT look up WP pages anymore.
+		// We will render demo content virtually from the package files in next commits.
+		$front_slug = sanitize_title( (string) ( $package['front_page_slug'] ?? '' ) );
+		$resolved   = $path ? $path : ( $front_slug ? $front_slug : '' );
 
-		$page = self::find_demo_page( $demo_slug, $resolved_slug );
-		if ( ! $page ) {
-			status_header( 404 );
+		// Expose to template.
+		$GLOBALS['hmps_demo_slug']     = $demo_slug;
+		$GLOBALS['hmps_demo_path']     = $path;
+		$GLOBALS['hmps_demo_resolved'] = $resolved;
+		$GLOBALS['hmps_demo_package']  = $package;
+
+		$template = HMPS_PLUGIN_DIR . 'templates/demo-shell.php';
+		if ( ! file_exists( $template ) ) {
+			status_header( 500 );
 			nocache_headers();
-			echo esc_html__( 'Demo page not found.', 'hm-pro-showcase' );
+			echo esc_html__( 'Demo template missing.', 'hm-pro-showcase' );
 			exit;
 		}
 
-		// Force WP main query to load this page.
-		global $wp_query;
-		$wp_query->init();
-		$wp_query->is_home       = false;
-		$wp_query->is_front_page = false;
-		$wp_query->is_page       = true;
-		$wp_query->is_singular   = true;
-		$wp_query->is_404        = false;
-
-		$wp_query->queried_object    = $page;
-		$wp_query->queried_object_id = (int) $page->ID;
-		$wp_query->post              = $page;
-		$wp_query->posts             = array( $page );
-		$wp_query->post_count        = 1;
-		$wp_query->found_posts       = 1;
-		$wp_query->max_num_pages     = 1;
-
-		global $post;
-		$post = $page;
-		setup_postdata( $post );
-
-		$template = get_page_template();
-		if ( ! $template ) {
-			$template = get_single_template();
-		}
-		if ( ! $template ) {
-			$template = get_index_template();
-		}
-
-		if ( $template ) {
-			include $template;
-		} else {
-			echo apply_filters( 'the_content', $page->post_content );
-		}
+		status_header( 200 );
+		nocache_headers();
+		include $template;
 		exit;
 	}
 
