@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-virtual-pages.php';
+
 /**
  * Preview Router Core
  *
@@ -87,10 +89,11 @@ final class HMPS_Preview_Router {
 		$resolved   = $path ? $path : ( $front_slug ? $front_slug : '' );
 
 		// Expose to template.
-		$GLOBALS['hmps_demo_slug']     = $demo_slug;
-		$GLOBALS['hmps_demo_path']     = $path;
-		$GLOBALS['hmps_demo_resolved'] = $resolved;
-		$GLOBALS['hmps_demo_package']  = $package;
+		$GLOBALS['hmps_demo_slug']          = $demo_slug;
+		$GLOBALS['hmps_demo_path']          = $path;
+		$GLOBALS['hmps_demo_resolved']      = $resolved;
+		$GLOBALS['hmps_demo_package']       = $package;
+		$GLOBALS['hmps_packages_base_dir']  = (string) $settings['packages_base_dir'];
 
 		$template = HMPS_PLUGIN_DIR . 'templates/demo-shell.php';
 		if ( ! file_exists( $template ) ) {
