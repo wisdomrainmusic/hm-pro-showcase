@@ -1,0 +1,236 @@
+{
+    "post_type": "hm_mega_menu",
+    "items": [
+        {
+            "ID": 100,
+            "title": "Mega Menu 1",
+            "slug": "mega-menu-1",
+            "status": "publish",
+            "content": "",
+            "meta": {
+                "_hmpro_mega_layout": {
+                    "schema_version": 1,
+                    "regions": {
+                        "mega_content": [
+                            {
+                                "id": "row_0q4ece_e8p4",
+                                "columns": [
+                                    {
+                                        "id": "col_left_l4c3xa_e8p4",
+                                        "width": 3,
+                                        "components": [
+                                            {
+                                                "id": "mega_column_menu_6qbo9v_egb5",
+                                                "type": "mega_column_menu",
+                                                "settings": {
+                                                    "source": "wp_menu",
+                                                    "menu_id": 92,
+                                                    "root_item_id": 263,
+                                                    "max_depth": 3,
+                                                    "show_root_title": 1,
+                                                    "max_items": 5,
+                                                    "show_more": 1,
+                                                    "flatten": 1,
+                                                    "more_text": "Daha Fazla Gör",
+                                                    "more_mode": "expand",
+                                                    "less_text": "Daha Az Göster"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "col_center_left_7xjjgt_e8p4",
+                                        "width": 3,
+                                        "components": [
+                                            {
+                                                "id": "mega_column_menu_aos2vk_egi8",
+                                                "type": "mega_column_menu",
+                                                "settings": {
+                                                    "source": "wp_menu",
+                                                    "menu_id": 92,
+                                                    "root_item_id": 272,
+                                                    "max_depth": 6,
+                                                    "show_root_title": 1,
+                                                    "max_items": 5,
+                                                    "show_more": 1,
+                                                    "flatten": 1,
+                                                    "more_text": "Daha Fazla Gör",
+                                                    "more_mode": "expand",
+                                                    "less_text": "Daha Az Göster"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "col_center_right_2xi1cy_e8p4",
+                                        "width": 3,
+                                        "components": [
+                                            {
+                                                "id": "mega_column_menu_sz7esk_egbp",
+                                                "type": "mega_column_menu",
+                                                "settings": {
+                                                    "source": "wp_menu",
+                                                    "menu_id": 92,
+                                                    "root_item_id": 277,
+                                                    "max_depth": 6,
+                                                    "show_root_title": 1,
+                                                    "max_items": 5,
+                                                    "show_more": 1,
+                                                    "flatten": 1,
+                                                    "more_text": "Daha Fazla Gör",
+                                                    "more_mode": "expand",
+                                                    "less_text": "Daha Az Göster"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "col_right_vgxc0q_e8p4",
+                                        "width": 3,
+                                        "components": [
+                                            {
+                                                "id": "mega_column_menu_fkcoc5_egi3",
+                                                "type": "mega_column_menu",
+                                                "settings": {
+                                                    "source": "wp_menu",
+                                                    "menu_id": 92,
+                                                    "root_item_id": 267,
+                                                    "max_depth": 6,
+                                                    "show_root_title": 1,
+                                                    "max_items": 5,
+                                                    "show_more": 1,
+                                                    "flatten": 1,
+                                                    "more_text": "Daha Fazla Gör",
+                                                    "more_mode": "expand",
+                                                    "less_text": "Daha Az Göster"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "_hmpro_mega_settings": {
+                    "height_mode": "auto",
+                    "secondary_menu": 0
+                }
+            }
+        },
+        {
+            "ID": 101,
+            "title": "Mega Menu 2",
+            "slug": "mega-menu-2",
+            "status": "publish",
+            "content": "",
+            "meta": {
+                "_hmpro_mega_layout": {
+                    "schema_version": 1,
+                    "regions": {
+                        "mega_content": [
+                            {
+                                "id": "row_7873ta_eflr",
+                                "columns": [
+                                    {
+                                        "id": "col_left_gmn3jg_eflr",
+                                        "width": 3,
+                                        "components": [
+                                            {
+                                                "id": "button_c3c7wb_eflt",
+                                                "type": "button",
+                                                "settings": {
+                                                    "text": "",
+                                                    "url": ""
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "col_center_left_hoqozb_eflr",
+                                        "width": 3,
+                                        "components": [
+                                            {
+                                                "id": "button_p5gfza_eflu",
+                                                "type": "button",
+                                                "settings": {
+                                                    "text": "",
+                                                    "url": ""
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "col_center_right_n5t7qq_eflr",
+                                        "width": 3,
+                                        "components": [
+                                            {
+                                                "id": "button_8720v5_eflu",
+                                                "type": "button",
+                                                "settings": {
+                                                    "text": "",
+                                                    "url": ""
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "col_right_yro3fq_eflr",
+                                        "width": 3,
+                                        "components": [
+                                            {
+                                                "id": "button_nqezy7_eflu",
+                                                "type": "button",
+                                                "settings": {
+                                                    "text": "",
+                                                    "url": ""
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "_hmpro_mega_settings": {
+                    "height_mode": "auto",
+                    "secondary_menu": 0
+                }
+            }
+        },
+        {
+            "ID": 102,
+            "title": "Mega Menu 3",
+            "slug": "mega-menu-3",
+            "status": "publish",
+            "content": "",
+            "meta": {
+                "_hmpro_mega_layout": "",
+                "_hmpro_mega_settings": ""
+            }
+        },
+        {
+            "ID": 103,
+            "title": "Mega Menu 4",
+            "slug": "mega-menu-4",
+            "status": "publish",
+            "content": "",
+            "meta": {
+                "_hmpro_mega_layout": "",
+                "_hmpro_mega_settings": ""
+            }
+        },
+        {
+            "ID": 104,
+            "title": "Mega Menu 5",
+            "slug": "mega-menu-5",
+            "status": "publish",
+            "content": "",
+            "meta": {
+                "_hmpro_mega_layout": "",
+                "_hmpro_mega_settings": ""
+            }
+        }
+    ]
+}

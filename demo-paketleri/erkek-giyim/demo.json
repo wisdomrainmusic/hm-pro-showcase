@@ -1,0 +1,13 @@
+{
+    "name": "Erkek Giyim Demo 1",
+    "description": "",
+    "cover": "",
+    "slug": "erkek-giyim",
+    "categories": [
+        "erkek-giyim"
+    ],
+    "tags": [],
+    "order": 10,
+    "front_page_slug": "ana-sayfa",
+    "posts_page_slug": ""
+}

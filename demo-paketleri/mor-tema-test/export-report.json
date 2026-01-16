@@ -1,0 +1,27 @@
+{
+    "demo_slug": "mor-tema-test",
+    "created_at": "2026-01-16 22:19:43",
+    "files": [
+        "demo.json",
+        "options.json",
+        "taxonomies.json",
+        "pages.json",
+        "media.json",
+        "products.json",
+        "menus.json",
+        "menu-locations.json",
+        "mega-menus.json",
+        "wc-settings.json"
+    ],
+    "counts": {
+        "options_keys": 4,
+        "product_cat": 71,
+        "pages": 20,
+        "media_items": 3,
+        "products": 1,
+        "menus": 5,
+        "menu_locations": 6,
+        "mega_menus": 5,
+        "wc_zones": 1
+    }
+}

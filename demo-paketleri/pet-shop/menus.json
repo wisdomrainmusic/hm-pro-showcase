@@ -1,0 +1,2113 @@
+[
+    {
+        "term_id": 70,
+        "name": "Kurumsal",
+        "slug": "kurumsal",
+        "items": [
+            {
+                "ID": 585,
+                "menu_item_parent": 0,
+                "object_id": 92,
+                "object": "page",
+                "type": "post_type",
+                "title": "Mesafeli Satış Sözleşmesi",
+                "url": "http:\/\/localhost\/tema-deneme\/mesafeli-satis-sozlesmesi\/",
+                "object_slug": "mesafeli-satis-sozlesmesi",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 1,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "92"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 586,
+                "menu_item_parent": 0,
+                "object_id": 90,
+                "object": "page",
+                "type": "post_type",
+                "title": "KVKK",
+                "url": "http:\/\/localhost\/tema-deneme\/kvkk\/",
+                "object_slug": "kvkk",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 2,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "90"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 587,
+                "menu_item_parent": 0,
+                "object_id": 88,
+                "object": "page",
+                "type": "post_type",
+                "title": "Çerez Politikası",
+                "url": "http:\/\/localhost\/tema-deneme\/cerez-politikasi\/",
+                "object_slug": "cerez-politikasi",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 3,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "88"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 588,
+                "menu_item_parent": 0,
+                "object_id": 86,
+                "object": "page",
+                "type": "post_type",
+                "title": "Gizlilik ve Güvenlik",
+                "url": "http:\/\/localhost\/tema-deneme\/gizlilik-ve-guvenlik\/",
+                "object_slug": "gizlilik-ve-guvenlik",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 4,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "86"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 589,
+                "menu_item_parent": 0,
+                "object_id": 72,
+                "object": "page",
+                "type": "post_type",
+                "title": "İletişim",
+                "url": "http:\/\/localhost\/tema-deneme\/iletisim\/",
+                "object_slug": "iletisim",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 5,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "72"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        "term_id": 68,
+        "name": "Main Menu",
+        "slug": "main-menu",
+        "items": [
+            {
+                "ID": 590,
+                "menu_item_parent": 0,
+                "object_id": 68,
+                "object": "page",
+                "type": "post_type",
+                "title": "Ana Sayfa",
+                "url": "http:\/\/localhost\/tema-deneme\/",
+                "object_slug": "ana-sayfa",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 1,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "68"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 591,
+                "menu_item_parent": 0,
+                "object_id": 17,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Kategoriler",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/",
+                "object_slug": "kategoriler",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 2,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "17"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ],
+                    "_hmpro_mega_menu_id": [
+                        "166"
+                    ],
+                    "_hmpro_mega_menu_slug": [
+                        "mega-menu-1"
+                    ]
+                }
+            },
+            {
+                "ID": 594,
+                "menu_item_parent": 0,
+                "object_id": 72,
+                "object": "page",
+                "type": "post_type",
+                "title": "İletişim",
+                "url": "http:\/\/localhost\/tema-deneme\/iletisim\/",
+                "object_slug": "iletisim",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 3,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "72"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 596,
+                "menu_item_parent": 0,
+                "object_id": 70,
+                "object": "page",
+                "type": "post_type",
+                "title": "Hakkımızda",
+                "url": "http:\/\/localhost\/tema-deneme\/hakkimizda\/",
+                "object_slug": "hakkimizda",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 4,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "70"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 604,
+                "menu_item_parent": 591,
+                "object_id": 16,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Genel",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/genel\/",
+                "object_slug": "genel",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 5,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "591"
+                    ],
+                    "_menu_item_object_id": [
+                        "16"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 605,
+                "menu_item_parent": 591,
+                "object_id": 17,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Kategoriler",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/",
+                "object_slug": "kategoriler",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 6,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "591"
+                    ],
+                    "_menu_item_object_id": [
+                        "17"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 595,
+                "menu_item_parent": 593,
+                "object_id": 595,
+                "object": "custom",
+                "type": "custom",
+                "title": "",
+                "url": "",
+                "object_slug": "",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 7,
+                "meta": {
+                    "_menu_item_type": [
+                        "custom"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "593"
+                    ],
+                    "_menu_item_object_id": [
+                        "595"
+                    ],
+                    "_menu_item_object": [
+                        "custom"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 597,
+                "menu_item_parent": 593,
+                "object_id": 597,
+                "object": "custom",
+                "type": "custom",
+                "title": "",
+                "url": "",
+                "object_slug": "",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 8,
+                "meta": {
+                    "_menu_item_type": [
+                        "custom"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "593"
+                    ],
+                    "_menu_item_object_id": [
+                        "597"
+                    ],
+                    "_menu_item_object": [
+                        "custom"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 598,
+                "menu_item_parent": 593,
+                "object_id": 598,
+                "object": "custom",
+                "type": "custom",
+                "title": "",
+                "url": "",
+                "object_slug": "",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 9,
+                "meta": {
+                    "_menu_item_type": [
+                        "custom"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "593"
+                    ],
+                    "_menu_item_object_id": [
+                        "598"
+                    ],
+                    "_menu_item_object": [
+                        "custom"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 599,
+                "menu_item_parent": 593,
+                "object_id": 599,
+                "object": "custom",
+                "type": "custom",
+                "title": "",
+                "url": "",
+                "object_slug": "",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 10,
+                "meta": {
+                    "_menu_item_type": [
+                        "custom"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "593"
+                    ],
+                    "_menu_item_object_id": [
+                        "599"
+                    ],
+                    "_menu_item_object": [
+                        "custom"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 600,
+                "menu_item_parent": 593,
+                "object_id": 600,
+                "object": "custom",
+                "type": "custom",
+                "title": "",
+                "url": "",
+                "object_slug": "",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 11,
+                "meta": {
+                    "_menu_item_type": [
+                        "custom"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "593"
+                    ],
+                    "_menu_item_object_id": [
+                        "600"
+                    ],
+                    "_menu_item_object": [
+                        "custom"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 601,
+                "menu_item_parent": 593,
+                "object_id": 601,
+                "object": "custom",
+                "type": "custom",
+                "title": "",
+                "url": "",
+                "object_slug": "",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 12,
+                "meta": {
+                    "_menu_item_type": [
+                        "custom"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "593"
+                    ],
+                    "_menu_item_object_id": [
+                        "601"
+                    ],
+                    "_menu_item_object": [
+                        "custom"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 602,
+                "menu_item_parent": 593,
+                "object_id": 602,
+                "object": "custom",
+                "type": "custom",
+                "title": "",
+                "url": "",
+                "object_slug": "",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 13,
+                "meta": {
+                    "_menu_item_type": [
+                        "custom"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "593"
+                    ],
+                    "_menu_item_object_id": [
+                        "602"
+                    ],
+                    "_menu_item_object": [
+                        "custom"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 603,
+                "menu_item_parent": 593,
+                "object_id": 603,
+                "object": "custom",
+                "type": "custom",
+                "title": "",
+                "url": "",
+                "object_slug": "",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 14,
+                "meta": {
+                    "_menu_item_type": [
+                        "custom"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "593"
+                    ],
+                    "_menu_item_object_id": [
+                        "603"
+                    ],
+                    "_menu_item_object": [
+                        "custom"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 606,
+                "menu_item_parent": 605,
+                "object_id": 73,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Aksesuar",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/aksesuar\/",
+                "object_slug": "aksesuar",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 15,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "605"
+                    ],
+                    "_menu_item_object_id": [
+                        "73"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 607,
+                "menu_item_parent": 605,
+                "object_id": 74,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Ayakkabı",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/ayakkabi\/",
+                "object_slug": "ayakkabi",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 16,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "605"
+                    ],
+                    "_menu_item_object_id": [
+                        "74"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 608,
+                "menu_item_parent": 605,
+                "object_id": 78,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Giyim",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/giyim\/",
+                "object_slug": "giyim",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 17,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "605"
+                    ],
+                    "_menu_item_object_id": [
+                        "78"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 609,
+                "menu_item_parent": 605,
+                "object_id": 81,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "İç Giyim",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/ic-giyim\/",
+                "object_slug": "ic-giyim",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 18,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "605"
+                    ],
+                    "_menu_item_object_id": [
+                        "81"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 610,
+                "menu_item_parent": 605,
+                "object_id": 18,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Test A",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/test-a\/",
+                "object_slug": "test-a",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 19,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "605"
+                    ],
+                    "_menu_item_object_id": [
+                        "18"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 611,
+                "menu_item_parent": 605,
+                "object_id": 29,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Test B",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/test-b\/",
+                "object_slug": "test-b",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 20,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "605"
+                    ],
+                    "_menu_item_object_id": [
+                        "29"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 612,
+                "menu_item_parent": 605,
+                "object_id": 42,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Test C",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/test-c\/",
+                "object_slug": "test-c",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 21,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "605"
+                    ],
+                    "_menu_item_object_id": [
+                        "42"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 613,
+                "menu_item_parent": 605,
+                "object_id": 55,
+                "object": "product_cat",
+                "type": "taxonomy",
+                "title": "Test D",
+                "url": "http:\/\/localhost\/tema-deneme\/urun-kategori\/kategoriler\/test-d\/",
+                "object_slug": "test-d",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 22,
+                "meta": {
+                    "_menu_item_type": [
+                        "taxonomy"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "605"
+                    ],
+                    "_menu_item_object_id": [
+                        "55"
+                    ],
+                    "_menu_item_object": [
+                        "product_cat"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        "term_id": 91,
+        "name": "Mobil Menü",
+        "slug": "mobil-menu",
+        "items": [
+            {
+                "ID": 614,
+                "menu_item_parent": 0,
+                "object_id": 68,
+                "object": "page",
+                "type": "post_type",
+                "title": "Ana Sayfa",
+                "url": "http:\/\/localhost\/tema-deneme\/",
+                "object_slug": "ana-sayfa",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 1,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "68"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 615,
+                "menu_item_parent": 0,
+                "object_id": 12,
+                "object": "page",
+                "type": "post_type",
+                "title": "Mağaza",
+                "url": "http:\/\/localhost\/tema-deneme\/magaza\/",
+                "object_slug": "magaza",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 2,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "12"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 616,
+                "menu_item_parent": 0,
+                "object_id": 70,
+                "object": "page",
+                "type": "post_type",
+                "title": "Hakkımızda",
+                "url": "http:\/\/localhost\/tema-deneme\/hakkimizda\/",
+                "object_slug": "hakkimizda",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 3,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "70"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 617,
+                "menu_item_parent": 0,
+                "object_id": 72,
+                "object": "page",
+                "type": "post_type",
+                "title": "İletişim",
+                "url": "http:\/\/localhost\/tema-deneme\/iletisim\/",
+                "object_slug": "iletisim",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 4,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "72"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 618,
+                "menu_item_parent": 0,
+                "object_id": 14,
+                "object": "page",
+                "type": "post_type",
+                "title": "Ödeme",
+                "url": "http:\/\/localhost\/tema-deneme\/odeme\/",
+                "object_slug": "odeme",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 5,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "14"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 619,
+                "menu_item_parent": 0,
+                "object_id": 13,
+                "object": "page",
+                "type": "post_type",
+                "title": "Sepet",
+                "url": "http:\/\/localhost\/tema-deneme\/sepet\/",
+                "object_slug": "sepet",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 6,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "13"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 620,
+                "menu_item_parent": 0,
+                "object_id": 84,
+                "object": "page",
+                "type": "post_type",
+                "title": "Sipariş Takibi",
+                "url": "http:\/\/localhost\/tema-deneme\/siparis-takibi\/",
+                "object_slug": "siparis-takibi",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 7,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "84"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 621,
+                "menu_item_parent": 0,
+                "object_id": 74,
+                "object": "page",
+                "type": "post_type",
+                "title": "Sıkça Sorulan Sorular",
+                "url": "http:\/\/localhost\/tema-deneme\/sikca-sorulan-sorular\/",
+                "object_slug": "sikca-sorulan-sorular",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 8,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "74"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        "term_id": 71,
+        "name": "Top Bar Menü",
+        "slug": "top-bar-menu",
+        "items": [
+            {
+                "ID": 622,
+                "menu_item_parent": 0,
+                "object_id": 84,
+                "object": "page",
+                "type": "post_type",
+                "title": "Sipariş Takibi",
+                "url": "http:\/\/localhost\/tema-deneme\/siparis-takibi\/",
+                "object_slug": "siparis-takibi",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 1,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "84"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 623,
+                "menu_item_parent": 0,
+                "object_id": 78,
+                "object": "page",
+                "type": "post_type",
+                "title": "Şifremi Unuttum",
+                "url": "http:\/\/localhost\/tema-deneme\/hesabim-lost-password\/",
+                "object_slug": "hesabim-lost-password",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 2,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "78"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 624,
+                "menu_item_parent": 0,
+                "object_id": 72,
+                "object": "page",
+                "type": "post_type",
+                "title": "İletişim",
+                "url": "http:\/\/localhost\/tema-deneme\/iletisim\/",
+                "object_slug": "iletisim",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 3,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "72"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 625,
+                "menu_item_parent": 0,
+                "object_id": 70,
+                "object": "page",
+                "type": "post_type",
+                "title": "Hakkımızda",
+                "url": "http:\/\/localhost\/tema-deneme\/hakkimizda\/",
+                "object_slug": "hakkimizda",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 4,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "70"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        "term_id": 69,
+        "name": "Yardım",
+        "slug": "yardim",
+        "items": [
+            {
+                "ID": 626,
+                "menu_item_parent": 0,
+                "object_id": 80,
+                "object": "page",
+                "type": "post_type",
+                "title": "Hesabım",
+                "url": "http:\/\/localhost\/tema-deneme\/hesabim-2\/",
+                "object_slug": "hesabim-2",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 1,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "80"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 627,
+                "menu_item_parent": 0,
+                "object_id": 78,
+                "object": "page",
+                "type": "post_type",
+                "title": "Şifremi Unuttum",
+                "url": "http:\/\/localhost\/tema-deneme\/hesabim-lost-password\/",
+                "object_slug": "hesabim-lost-password",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 2,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "78"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 628,
+                "menu_item_parent": 0,
+                "object_id": 76,
+                "object": "page",
+                "type": "post_type",
+                "title": "Kargo ve Teslimat",
+                "url": "http:\/\/localhost\/tema-deneme\/kargo-ve-teslimat\/",
+                "object_slug": "kargo-ve-teslimat",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 3,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "76"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 629,
+                "menu_item_parent": 0,
+                "object_id": 74,
+                "object": "page",
+                "type": "post_type",
+                "title": "Sıkça Sorulan Sorular",
+                "url": "http:\/\/localhost\/tema-deneme\/sikca-sorulan-sorular\/",
+                "object_slug": "sikca-sorulan-sorular",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 4,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "74"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 630,
+                "menu_item_parent": 0,
+                "object_id": 84,
+                "object": "page",
+                "type": "post_type",
+                "title": "Sipariş Takibi",
+                "url": "http:\/\/localhost\/tema-deneme\/siparis-takibi\/",
+                "object_slug": "siparis-takibi",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 5,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "84"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "ID": 631,
+                "menu_item_parent": 0,
+                "object_id": 82,
+                "object": "page",
+                "type": "post_type",
+                "title": "İade ve Değişim",
+                "url": "http:\/\/localhost\/tema-deneme\/iade-ve-degisim\/",
+                "object_slug": "iade-ve-degisim",
+                "target": "",
+                "attr_title": "",
+                "classes": [
+                    ""
+                ],
+                "xfn": "",
+                "description": "",
+                "menu_order": 6,
+                "meta": {
+                    "_menu_item_type": [
+                        "post_type"
+                    ],
+                    "_menu_item_menu_item_parent": [
+                        "0"
+                    ],
+                    "_menu_item_object_id": [
+                        "82"
+                    ],
+                    "_menu_item_object": [
+                        "page"
+                    ],
+                    "_menu_item_target": [
+                        ""
+                    ],
+                    "_menu_item_classes": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "_menu_item_xfn": [
+                        ""
+                    ],
+                    "_menu_item_url": [
+                        ""
+                    ]
+                }
+            }
+        ]
+    }
+]

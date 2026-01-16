@@ -1,0 +1,23 @@
+{
+    "demo_slug": "mor-tema-test",
+    "applied_at": "2026-01-16 23:38:51",
+    "counts": {
+        "product_cat": 71,
+        "media_imported": 3,
+        "pages": 20,
+        "products_upserted": 1,
+        "wc_zones_upserted": 1,
+        "wc_methods_added": 2,
+        "mega_menus": 5,
+        "menus": 0,
+        "menu_items": 41,
+        "menu_locations": 6,
+        "options": 4
+    },
+    "notes": [],
+    "front_page": {
+        "set": true,
+        "id": 68,
+        "slug": "ana-sayfa"
+    }
+}

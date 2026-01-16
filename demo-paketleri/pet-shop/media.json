@@ -1,0 +1,98 @@
+{
+    "source_upload_baseurl": "http:\/\/localhost\/tema-deneme\/wp-content\/uploads",
+    "items": [
+        {
+            "old_id": 581,
+            "rel_path": "2026\/01\/pexels-tahir-osman-109306362-20299401.jpg",
+            "mime_type": "image\/jpeg",
+            "title": "pexels-tahir-osman-109306362-20299401",
+            "caption": "",
+            "description": "",
+            "alt": "",
+            "meta": {
+                "width": 4333,
+                "height": 6499,
+                "file": "2026\/01\/pexels-tahir-osman-109306362-20299401.jpg",
+                "filesize": 1201480,
+                "sizes": [],
+                "image_meta": {
+                    "aperture": "0",
+                    "credit": "",
+                    "camera": "",
+                    "caption": "",
+                    "created_timestamp": "0",
+                    "copyright": "",
+                    "focal_length": "0",
+                    "iso": "0",
+                    "shutter_speed": "0",
+                    "title": "",
+                    "orientation": "0",
+                    "keywords": []
+                }
+            },
+            "source_url": "http:\/\/localhost\/tema-deneme\/wp-content\/uploads\/2026\/01\/pexels-tahir-osman-109306362-20299401.jpg"
+        },
+        {
+            "old_id": 582,
+            "rel_path": "2026\/01\/pexels-kimtek-meedia-2158711895-35554640.jpg",
+            "mime_type": "image\/jpeg",
+            "title": "pexels-kimtek-meedia-2158711895-35554640",
+            "caption": "",
+            "description": "",
+            "alt": "",
+            "meta": {
+                "width": 4107,
+                "height": 6428,
+                "file": "2026\/01\/pexels-kimtek-meedia-2158711895-35554640.jpg",
+                "filesize": 6160577,
+                "sizes": [],
+                "image_meta": {
+                    "aperture": "0",
+                    "credit": "",
+                    "camera": "",
+                    "caption": "",
+                    "created_timestamp": "0",
+                    "copyright": "",
+                    "focal_length": "0",
+                    "iso": "0",
+                    "shutter_speed": "0",
+                    "title": "",
+                    "orientation": "0",
+                    "keywords": []
+                }
+            },
+            "source_url": "http:\/\/localhost\/tema-deneme\/wp-content\/uploads\/2026\/01\/pexels-kimtek-meedia-2158711895-35554640.jpg"
+        },
+        {
+            "old_id": 583,
+            "rel_path": "2026\/01\/screenshot.png",
+            "mime_type": "image\/png",
+            "title": "screenshot",
+            "caption": "",
+            "description": "",
+            "alt": "",
+            "meta": {
+                "width": 1200,
+                "height": 900,
+                "file": "2026\/01\/screenshot.png",
+                "filesize": 1506296,
+                "sizes": [],
+                "image_meta": {
+                    "aperture": "0",
+                    "credit": "",
+                    "camera": "",
+                    "caption": "",
+                    "created_timestamp": "0",
+                    "copyright": "",
+                    "focal_length": "0",
+                    "iso": "0",
+                    "shutter_speed": "0",
+                    "title": "",
+                    "orientation": "0",
+                    "keywords": []
+                }
+            },
+            "source_url": "http:\/\/localhost\/tema-deneme\/wp-content\/uploads\/2026\/01\/screenshot.png"
+        }
+    ]
+}

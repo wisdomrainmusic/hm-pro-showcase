@@ -1,0 +1,58 @@
+{
+    "ok": true,
+    "page_slugs": {
+        "woocommerce_cart_page_id": "sepet",
+        "woocommerce_checkout_page_id": "odeme",
+        "woocommerce_myaccount_page_id": "hesabim",
+        "woocommerce_terms_page_id": ""
+    },
+    "options": {
+        "woocommerce_currency": "TRY",
+        "woocommerce_default_country": "TR:TR34",
+        "woocommerce_allowed_countries": "all",
+        "woocommerce_specific_allowed_countries": "",
+        "woocommerce_ship_to_countries": "",
+        "woocommerce_specific_ship_to_countries": "",
+        "woocommerce_prices_include_tax": "no",
+        "woocommerce_calc_taxes": "no",
+        "woocommerce_enable_guest_checkout": "yes",
+        "woocommerce_enable_checkout_login_reminder": "no",
+        "woocommerce_enable_signup_and_login_from_checkout": "yes",
+        "woocommerce_enable_myaccount_registration": "yes",
+        "woocommerce_checkout_highlight_required_fields": "yes",
+        "woocommerce_shipping_calc_shipping": "",
+        "woocommerce_enable_coupons": "yes",
+        "woocommerce_terms_page_id": "3"
+    },
+    "shipping": {
+        "zones": [
+            {
+                "name": "Türkiye",
+                "order": 0,
+                "locations": [
+                    {
+                        "type": "country",
+                        "code": "TR"
+                    }
+                ],
+                "methods": [
+                    {
+                        "method_id": "free_shipping",
+                        "instance_id": 1,
+                        "enabled": "yes",
+                        "title": "Ücretsiz gönderim",
+                        "order": 1,
+                        "settings_opt": "woocommerce_free_shipping_1_settings",
+                        "settings": {
+                            "title": "Ücretsiz gönderim",
+                            "requires": "min_amount",
+                            "min_amount": "1500",
+                            "ignore_discounts": "no",
+                            "enabled": "yes"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

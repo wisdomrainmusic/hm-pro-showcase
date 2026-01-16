@@ -1,0 +1,48 @@
+{
+    "post_type": "product",
+    "items": [
+        {
+            "title": "Test Ürünü",
+            "slug": "test-urunu",
+            "status": "publish",
+            "content": "Ürün Açıklaması",
+            "excerpt": "Ürün kısa açıklaması",
+            "product_cat": [
+                "abiye-ayakkabi",
+                "aksesuar",
+                "ayakkabi",
+                "boxer",
+                "canta",
+                "elbise",
+                "giyim",
+                "gomlek",
+                "ic-camasiri",
+                "ic-giyim",
+                "kategoriler",
+                "kazak",
+                "kilot",
+                "kislik-ayakkabi",
+                "kolye",
+                "pantolon",
+                "spor-ayakkabi",
+                "sutyen",
+                "taki",
+                "yazlik-ayakkabi"
+            ],
+            "product_tag": [],
+            "featured_image_id": 76,
+            "gallery_image_ids": [
+                78,
+                76,
+                77
+            ],
+            "sku": "",
+            "regular_price": "100",
+            "sale_price": "90",
+            "price": "90",
+            "stock_status": "instock",
+            "manage_stock": "no",
+            "stock": ""
+        }
+    ]
+}
