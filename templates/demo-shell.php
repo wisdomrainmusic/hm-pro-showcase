@@ -37,7 +37,7 @@ get_header();
 <div style="max-width:1200px;margin:24px auto;padding:0 18px;">
 	<?php
 	// Showcase page (front list) – default /a1/ but can be overridden later via setting.
-	$showcase_url = home_url( '/a1/' );
+	$showcase_url = HMPS_Preview_Context::showcase_url();
 	// Exit can go to homepage now; later we can redirect to pricing/product.
 	$exit_url = home_url( '/' );
 	?>

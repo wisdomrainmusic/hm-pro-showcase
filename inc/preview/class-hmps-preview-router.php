@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-virtual-pages.php';
+require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-context.php';
+require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-menu-rewrite.php';
 
 /**
  * Preview Router Core
@@ -68,6 +70,11 @@ final class HMPS_Preview_Router {
 		$demo_slug = $demo_slug ? sanitize_title( (string) $demo_slug ) : '';
 		if ( ! $demo_slug ) {
 			return;
+		}
+
+		// When in preview, rewrite theme menu links into demo scope.
+		if ( HMPS_Preview_Context::is_preview() ) {
+			HMPS_Menu_Rewrite::boot();
 		}
 
 		$path = get_query_var( self::QV_PATH );

@@ -108,12 +108,21 @@ final class HMPS_Admin {
 			'hmps_settings',
 			'hmps_settings_main'
 		);
+
+		add_settings_field(
+			'showcase_path',
+			__( 'Showcase path', 'hm-pro-showcase' ),
+			array( __CLASS__, 'field_showcase_path' ),
+			'hmps_settings',
+			'hmps_settings_main'
+		);
 	}
 
 	public static function get_settings() : array {
 		$defaults = array(
 			'packages_base_dir' => '',
 			'preview_base_slug' => 'demo',
+			'showcase_path'     => '/a1/',
 		);
 		$opt = get_option( 'hmps_settings', array() );
 		if ( ! is_array( $opt ) ) {
@@ -163,6 +172,13 @@ final class HMPS_Admin {
 			$slug = wp_unslash( (string) $input['preview_base_slug'] );
 			$slug = sanitize_title( $slug );
 			$out['preview_base_slug'] = $slug ? $slug : 'demo';
+		}
+
+		if ( isset( $input['showcase_path'] ) ) {
+			$path = wp_unslash( (string) $input['showcase_path'] );
+			$path = sanitize_text_field( $path );
+			$path = '/' . ltrim( trim( $path ), '/' );
+			$out['showcase_path'] = $path ? $path : '/a1/';
 		}
 
 		return $out;
@@ -340,6 +356,15 @@ final class HMPS_Admin {
 			esc_attr( $s['preview_base_slug'] )
 		);
 		echo '<p class="description">' . esc_html__( 'Base URL slug for demo preview routes. Example: /demo/{package-slug}/', 'hm-pro-showcase' ) . '</p>';
+	}
+
+	public static function field_showcase_path() : void {
+		$s = self::get_settings();
+		printf(
+			'<input type="text" class="regular-text" name="hmps_settings[showcase_path]" value="%s" placeholder="/a1/" />',
+			esc_attr( $s['showcase_path'] )
+		);
+		echo '<p class="description">' . esc_html__( 'Path for the public showcase list page (used by demo shell). Example: /showcase/', 'hm-pro-showcase' ) . '</p>';
 	}
 
 	/**
