@@ -4,6 +4,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 final class HMPS_Virtual_Pages {
+	public static function package_dir_from_globals() : string {
+		$slug = isset( $GLOBALS['hmps_demo_slug'] ) ? (string) $GLOBALS['hmps_demo_slug'] : '';
+		$base = isset( $GLOBALS['hmps_packages_base_dir'] ) ? (string) $GLOBALS['hmps_packages_base_dir'] : '';
+		if ( ! $slug || ! $base ) {
+			return '';
+		}
+		return wp_normalize_path( trailingslashit( $base ) . $slug );
+	}
+
 	public static function preview_base_slug() : string {
 		$opt  = get_option( 'hmps_settings', array() );
 		$slug = isset( $opt['preview_base_slug'] ) ? (string) $opt['preview_base_slug'] : 'demo';
