@@ -19,6 +19,15 @@ final class HMPS_Preview_Context {
 		return $slug ? $slug : 'demo';
 	}
 
+	/**
+	 * Back-compat alias.
+	 *
+	 * Some modules call preview_base_slug() while the canonical method is preview_base().
+	 */
+	public static function preview_base_slug() : string {
+		return self::preview_base();
+	}
+
 	public static function demo_base_url() : string {
 		$demo = self::demo_slug();
 		if ( ! $demo ) {
