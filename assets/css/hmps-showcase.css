@@ -23,13 +23,30 @@
 }
 
 .hmps-tab{
+  /* Prevent theme button/link overrides */
+  appearance:none;
+  -webkit-appearance:none;
+  text-decoration:none !important;
+  box-shadow:none !important;
+  outline:none;
+
   border:1px solid rgba(0,0,0,.12);
   background:#fff;
+  color:#111 !important;
+  -webkit-text-fill-color:#111; /* Safari/WebKit safety */
   padding:8px 12px;
   border-radius:999px;
   cursor:pointer;
   white-space:nowrap;
   transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.hmps-tab:visited,
+.hmps-tab:hover,
+.hmps-tab:active,
+.hmps-tab:focus{
+  color:#111 !important;
+  -webkit-text-fill-color:#111;
 }
 
 .hmps-tab:hover{
@@ -39,7 +56,8 @@
 
 .hmps-tab.is-active{
   background:#111;
-  color:#fff;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff;
   border-color:#111;
 }
 
