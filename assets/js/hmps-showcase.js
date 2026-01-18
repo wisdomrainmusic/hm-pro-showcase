@@ -54,6 +54,79 @@
       });
     }
 
+    function ensureOverlay(){
+      var existing = document.querySelector('.hmps-preview-overlay');
+      if(existing) return existing;
+
+      var overlay = document.createElement('div');
+      overlay.className = 'hmps-preview-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);color:#fff;font-size:16px;z-index:999999;';
+      overlay.innerHTML = '<div style="padding:16px 20px;background:rgba(0,0,0,.65);border-radius:12px;font-family:Arial,sans-serif">Demo yükleniyor...</div>';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    function pickRuntimeKey(){
+      if(window.HMPS_SHOWCASE && window.HMPS_SHOWCASE.runtimeKey){
+        return window.HMPS_SHOWCASE.runtimeKey;
+      }
+      return 'rt1';
+    }
+
+    function requestPreview(slug, popupWin){
+      var endpoint = (window.HMPS_SHOWCASE && window.HMPS_SHOWCASE.previewEndpoint) ? window.HMPS_SHOWCASE.previewEndpoint : '';
+      if(!endpoint){
+        alert('Preview endpoint not configured.');
+        return;
+      }
+
+      var overlay = ensureOverlay();
+      overlay.style.display = 'flex';
+
+      // If popup was blocked, we will fall back to same-tab redirect.
+      // popupWin may be null.
+
+      var payload = {
+        slug: slug,
+        runtime: pickRuntimeKey()
+      };
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(function(res){
+        return res.json().then(function(json){
+          return { ok: res.ok, json: json };
+        });
+      })
+      .then(function(res){
+        overlay.style.display = 'none';
+        if(!res.ok || !res.json || !res.json.ok){
+          var msg = (res.json && res.json.message) ? res.json.message : 'Preview failed.';
+          alert(msg);
+          // close the blank popup if we created it
+          try { if(popupWin && !popupWin.closed){ popupWin.close(); } } catch(e){}
+          return;
+        }
+        var url = res.json.redirect_to || res.json.runtime;
+        if(url){
+          // Prefer redirecting the pre-opened popup (avoids popup blocker).
+          if(popupWin && !popupWin.closed){
+            try { popupWin.location = url; } catch(e){ window.location.href = url; }
+          } else {
+            window.location.href = url;
+          }
+        }
+      })
+      .catch(function(err){
+        overlay.style.display = 'none';
+        alert(err && err.message ? err.message : 'Preview request error.');
+        try { if(popupWin && !popupWin.closed){ popupWin.close(); } } catch(e){}
+      });
+    }
+
     tabs.forEach(function(btn){
       btn.addEventListener('click', function(){
         tabs.forEach(function(b){ b.classList.remove('is-active'); });
@@ -80,7 +153,24 @@
     // initial
     apply();
 
-    // Preview/player integration intentionally removed in showcase-only mode.
+    qsa(root, '.hmps-preview').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var slug = btn.getAttribute('data-slug') || '';
+        if(!slug) return;
+
+        // Open popup synchronously in direct click handler to avoid browser blocking.
+        var popupWin = null;
+        try {
+          popupWin = window.open('about:blank', '_blank');
+          if(popupWin){
+            popupWin.document.title = 'Loading demo...';
+            popupWin.document.body.innerHTML = '<p style="font-family:Arial,sans-serif;padding:16px">Demo is loading, please wait...</p>';
+          }
+        } catch(e){ popupWin = null; }
+
+        requestPreview(slug, popupWin);
+      });
+    });
   }
 
   document.addEventListener('DOMContentLoaded', function(){
