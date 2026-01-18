@@ -118,16 +118,29 @@
 
     function writeWindowLoading(w, slug){
       try {
+        var cover = '';
+        try {
+          if (window.HMPS_SHOWCASE && window.HMPS_SHOWCASE.coverUrl) {
+            cover = String(window.HMPS_SHOWCASE.coverUrl);
+          }
+        } catch(e) {}
+
         w.document.open();
         w.document.write(
           '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
-          '<title>Demo Loading</title></head>'+
-          '<body style="margin:0;font-family:Arial,sans-serif;background:#0b0d12;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;">'+
-            '<div style="text-align:center;max-width:520px;padding:24px;">'+
+          '<title>Demo Hazırlanıyor</title></head>'+
+          '<body style="margin:0;font-family:Arial,sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;position:relative;overflow:hidden;">'+
+            (cover ? (
+              '<div style="position:absolute;inset:0;background-image:url(' + cover.replace(/"/g,'&quot;') + ');background-size:cover;background-position:center;filter:blur(2px);transform:scale(1.03);opacity:.35;"></div>'
+            ) : (
+              '<div style="position:absolute;inset:0;background:#0b0d12;"></div>'
+            )) +
+            '<div style="position:absolute;inset:0;background:rgba(0,0,0,.55);"></div>'+
+            '<div style="position:relative;z-index:1;text-align:center;max-width:560px;padding:28px 24px;">'+
               '<div style="width:54px;height:54px;border:4px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:999px;margin:0 auto 16px;animation:spin 1s linear infinite"></div>'+
-              '<h3 style="margin:0 0 8px;font-size:22px;line-height:1.2">Demo is being prepared…</h3>'+
-              '<p style="margin:0;opacity:.85;font-size:14px;line-height:1.5">Please keep this tab open. Redirect will happen automatically.</p>'+
-              (slug ? '<p style="margin:14px 0 0;opacity:.7;font-size:12px">Demo: '+ String(slug).replace(/</g,'&lt;') +'</p>' : '') +
+              '<h3 style="margin:0 0 8px;font-size:22px;line-height:1.2">Demo hazırlanıyor…</h3>'+
+              '<p style="margin:0;opacity:.88;font-size:14px;line-height:1.55">Lütfen bu sekmeyi kapatmayın. İşlem tamamlanınca otomatik olarak yönlendirileceksiniz.</p>'+
+              (slug ? '<p style="margin:14px 0 0;opacity:.75;font-size:12px">Demo: '+ String(slug).replace(/</g,'&lt;') +'</p>' : '') +
               '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>'+
             '</div>'+
           '</body></html>'
