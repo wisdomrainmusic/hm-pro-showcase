@@ -410,7 +410,8 @@ final class HMPS_Virtual_Pages {
 		update_post_meta( $pid, '_hmps_page_slug', $page_slug );
 
 		// Apply Elementor meta fields if present.
-		foreach ( array( '_elementor_data', '_elementor_edit_mode', '_elementor_template_type', '_elementor_version', '_wp_page_template' ) as $k ) {
+		// NOTE: _elementor_page_settings is critical for layout (full-width), padding, background, header/footer settings, etc.
+		foreach ( array( '_elementor_data', '_elementor_page_settings', '_elementor_edit_mode', '_elementor_template_type', '_elementor_version', '_wp_page_template' ) as $k ) {
 			if ( ! isset( $meta[ $k ] ) ) {
 				continue;
 			}
