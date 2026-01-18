@@ -1,4 +1,5 @@
 (function(){
+  var RR_KEY = 'hmps_runtime_rr_index';
   function qs(root, sel){ return root.querySelector(sel); }
   function qsa(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
 
@@ -92,19 +93,52 @@
       return ov;
     }
 
-    function pickRuntimeKey(){
+    function pickRuntimeKeyRoundRobin(){
       try {
         if(window.HMPS_SHOWCASE && Array.isArray(window.HMPS_SHOWCASE.runtimeKeys) && window.HMPS_SHOWCASE.runtimeKeys.length){
-          return window.HMPS_SHOWCASE.runtimeKeys[0];
+          var keys = window.HMPS_SHOWCASE.runtimeKeys.slice(0);
+          var idx = 0;
+          try {
+            idx = parseInt(window.localStorage.getItem(RR_KEY) || '0', 10);
+            if(isNaN(idx) || idx < 0) idx = 0;
+          } catch(e) { idx = 0; }
+
+          var pick = keys[idx % keys.length];
+
+          // advance
+          try {
+            window.localStorage.setItem(RR_KEY, String((idx + 1) % keys.length));
+          } catch(e) {}
+
+          return pick;
         }
       } catch(e){}
       return 'rt1';
     }
 
-    function requestPreview(slug){
+    function writeWindowLoading(w){
+      try {
+        w.document.open();
+        w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Loading...</title></head><body style="font-family:Arial,sans-serif;padding:24px;"><h3>Demo yükleniyor...</h3><p>Lütfen bekleyin.</p></body></html>');
+        w.document.close();
+      } catch(e){}
+    }
+
+    function writeWindowError(w, msg){
+      try {
+        w.document.open();
+        w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Preview Failed</title></head><body style="font-family:Arial,sans-serif;padding:24px;"><h3>Önizleme başarısız</h3><p>' + String(msg || 'Unknown error') + '</p></body></html>');
+        w.document.close();
+      } catch(e){
+        try { w.alert(msg || 'Preview failed.'); } catch(_e){}
+      }
+    }
+
+    function requestPreview(slug, popupWin){
       var endpoint = (window.HMPS_SHOWCASE && window.HMPS_SHOWCASE.previewEndpoint) ? window.HMPS_SHOWCASE.previewEndpoint : '';
       if(!endpoint){
-        alert('Preview endpoint not configured.');
+        if(popupWin) writeWindowError(popupWin, 'Preview endpoint not configured.');
+        else alert('Preview endpoint not configured.');
         return;
       }
 
@@ -113,7 +147,7 @@
 
       var payload = {
         slug: slug,
-        runtime: pickRuntimeKey()
+        runtime: pickRuntimeKeyRoundRobin()
       };
 
       fetch(endpoint, {
@@ -126,24 +160,43 @@
         overlay.style.display = 'none';
         if(!res.ok || !res.json || !res.json.ok){
           var msg = (res.json && res.json.message) ? res.json.message : 'Preview failed.';
-          alert(msg);
+          if(popupWin) writeWindowError(popupWin, msg);
+          else alert(msg);
           return;
         }
         var url = res.json.redirect_to || res.json.runtime;
         if(url){
-          window.open(url, '_blank');
+          if(popupWin){
+            try { popupWin.location.href = url; } catch(e){ window.open(url, '_blank'); }
+          } else {
+            window.open(url, '_blank');
+          }
         }
       })
       .catch(function(err){
         overlay.style.display = 'none';
-        alert(err && err.message ? err.message : 'Preview request error.');
+        var emsg = (err && err.message) ? err.message : 'Preview request error.';
+        if(popupWin) writeWindowError(popupWin, emsg);
+        else alert(emsg);
       });
     }
 
     qsa(root, '.hmps-preview').forEach(function(btn){
       btn.addEventListener('click', function(){
         var slug = btn.getAttribute('data-slug') || '';
-        if(slug) requestPreview(slug);
+        if(!slug) return;
+
+        // Popup-proof: open immediately on click.
+        var w = null;
+        try {
+          w = window.open('about:blank', '_blank');
+        } catch(e) { w = null; }
+
+        if(w){
+          writeWindowLoading(w);
+        }
+
+        requestPreview(slug, w);
       });
     });
   }
