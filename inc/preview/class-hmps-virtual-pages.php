@@ -7,6 +7,9 @@ final class HMPS_Virtual_Pages {
 	/** @var array<string,int> */
 	private static $preview_posts_cache = array();
 
+	/** @var array<string,array<int,string>> */
+	private static $media_url_map_cache = array();
+
 	public static function package_dir_from_globals() : string {
 		$slug = isset( $GLOBALS['hmps_demo_slug'] ) ? (string) $GLOBALS['hmps_demo_slug'] : '';
 		$base = isset( $GLOBALS['hmps_packages_base_dir'] ) ? (string) $GLOBALS['hmps_packages_base_dir'] : '';
@@ -55,9 +58,32 @@ final class HMPS_Virtual_Pages {
 		);
 
 		// Rewrite site absolute URLs to demo URLs (same host).
+		// Example: href="https://example.com/shop/" => href="/demo/<slug>/shop/"
 		$home = home_url( '/' );
 		$home = rtrim( $home, '/' );
-		$html = str_replace( $home . '/', $home . $base, $html );
+		$html = preg_replace_callback(
+			'#href=("|\')(' . preg_quote( $home, '#' ) . ')(/[^"\']*)("|\')#i',
+			function( $m ) use ( $base ) {
+				$q    = $m[1];
+				$path = $m[3];
+				if ( preg_match( '#^/(wp-admin|wp-login\.php|wp-content|wp-includes)/#i', $path ) ) {
+					return 'href=' . $q . $m[2] . $path . $q;
+				}
+				if ( 0 === strpos( $path, $base ) ) {
+					return 'href=' . $q . $m[2] . $path . $q;
+				}
+				return 'href=' . $q . $base . ltrim( $path, '/' ) . $q;
+			},
+			$html
+		);
+
+		// If a link already points to another demo within the showcase base,
+		// force it back into the current demo.
+		$html = preg_replace(
+			'#href=("|\')/(?:' . preg_quote( self::preview_base_slug(), '#' ) . ')/[^/]+/#i',
+			'href=$1/' . self::preview_base_slug() . '/' . $demo_slug . '/',
+			$html
+		);
 
 		return $html;
 	}
@@ -102,8 +128,110 @@ final class HMPS_Virtual_Pages {
 		}
 		// First, map exported site to current site.
 		$html = str_replace( $src . '/', $home . '/', $html );
+		// Rewrite uploads/media URLs into preview-served media.
+		$html = self::rewrite_uploads_to_preview_media( $html, $package_dir, $demo_slug );
 		// Then, keep navigation inside demo scope.
 		return self::rewrite_internal_links( $html, $demo_slug );
+	}
+
+	private static function rewrite_uploads_to_preview_media( string $html, string $package_dir, string $demo_slug ) : string {
+		$demo_slug = sanitize_title( $demo_slug );
+		if ( ! $demo_slug ) {
+			return $html;
+		}
+		$file = trailingslashit( wp_normalize_path( $package_dir ) ) . 'media.json';
+		if ( ! file_exists( $file ) ) {
+			return $html;
+		}
+		$json = file_get_contents( $file );
+		if ( ! $json ) {
+			return $html;
+		}
+		$data = json_decode( $json, true );
+		if ( ! is_array( $data ) ) {
+			return $html;
+		}
+		$src_uploads = isset( $data['source_upload_baseurl'] ) ? rtrim( (string) $data['source_upload_baseurl'], '/' ) : '';
+		$dst_base    = rtrim( home_url( '/' ), '/' ) . '/' . self::preview_base_slug() . '/' . $demo_slug . '/media';
+		if ( ! $src_uploads ) {
+			return $html;
+		}
+
+		// Replace exported uploads base with preview media route.
+		$html = str_replace( $src_uploads . '/', $dst_base . '/', $html );
+
+		// Also rewrite current-site uploads base (in case content already partially rewritten).
+		$up = wp_upload_dir();
+		if ( isset( $up['baseurl'] ) && $up['baseurl'] ) {
+			$cur = rtrim( (string) $up['baseurl'], '/' );
+			$html = str_replace( $cur . '/', $dst_base . '/', $html );
+		}
+
+		return $html;
+	}
+
+	private static function media_id_to_url_map( string $package_dir, string $demo_slug ) : array {
+		$demo_slug  = sanitize_title( $demo_slug );
+		$package_dir = wp_normalize_path( $package_dir );
+		$cache_key  = $demo_slug . '::' . $package_dir;
+		if ( isset( self::$media_url_map_cache[ $cache_key ] ) ) {
+			return (array) self::$media_url_map_cache[ $cache_key ];
+		}
+
+		$map  = array();
+		$file = trailingslashit( $package_dir ) . 'media.json';
+		if ( file_exists( $file ) ) {
+			$json = file_get_contents( $file );
+			$data = $json ? json_decode( $json, true ) : null;
+			if ( is_array( $data ) && ! empty( $data['items'] ) && is_array( $data['items'] ) ) {
+				$base = rtrim( home_url( '/' ), '/' ) . '/' . self::preview_base_slug() . '/' . $demo_slug . '/media/';
+				foreach ( $data['items'] as $it ) {
+					$old = isset( $it['old_id'] ) ? (int) $it['old_id'] : 0;
+					$rel = isset( $it['rel_path'] ) ? (string) $it['rel_path'] : '';
+					if ( $old > 0 && $rel ) {
+						$map[ $old ] = $base . ltrim( $rel, '/' );
+					}
+				}
+			}
+		}
+
+		self::$media_url_map_cache[ $cache_key ] = $map;
+		return $map;
+	}
+
+	private static function patch_elementor_media_urls( string $elementor_json, string $package_dir, string $demo_slug ) : string {
+		$elementor_json = (string) $elementor_json;
+		$decoded        = json_decode( $elementor_json, true );
+		if ( ! is_array( $decoded ) ) {
+			return $elementor_json;
+		}
+		$map = self::media_id_to_url_map( $package_dir, $demo_slug );
+		if ( ! $map ) {
+			return $elementor_json;
+		}
+
+		$walker = function( &$node ) use ( &$walker, $map ) {
+			if ( is_array( $node ) ) {
+				// Patch Elementor media control arrays: {id:123, url:""}
+				if ( isset( $node['id'] ) && is_numeric( $node['id'] ) ) {
+					$id = (int) $node['id'];
+					if ( $id > 0 && isset( $map[ $id ] ) ) {
+						if ( empty( $node['url'] ) ) {
+							$node['url'] = $map[ $id ];
+						}
+						// Prevent attachment lookups.
+						$node['id'] = 0;
+					}
+				}
+				foreach ( $node as $k => &$v ) {
+					$walker( $v );
+				}
+			}
+		};
+		$walker( $decoded );
+
+		$out = wp_json_encode( $decoded );
+		return $out ? $out : $elementor_json;
 	}
 
 	/**
@@ -210,7 +338,7 @@ final class HMPS_Virtual_Pages {
 		// Elementor pages: render via a temporary preview post so Elementor can hydrate widgets.
 		$rendered = '';
 		if ( ! empty( $meta['_elementor_data'] ) && class_exists( '\\Elementor\\Plugin' ) ) {
-			$post_id = self::ensure_preview_post( $demo_slug, $page_slug, $title, $content, $meta );
+			$post_id = self::ensure_preview_post( $demo_slug, $page_slug, $title, $content, $meta, $package_dir );
 			if ( $post_id ) {
 				try {
 					$rendered = (string) \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $post_id, true );
@@ -240,7 +368,7 @@ final class HMPS_Virtual_Pages {
 	/**
 	 * Create or reuse a hidden preview post for Elementor rendering.
 	 */
-	private static function ensure_preview_post( string $demo_slug, string $page_slug, string $title, string $content, array $meta ) : int {
+	private static function ensure_preview_post( string $demo_slug, string $page_slug, string $title, string $content, array $meta, string $package_dir ) : int {
 		$demo_slug = sanitize_title( $demo_slug );
 		$page_slug = sanitize_title( $page_slug );
 		if ( ! $demo_slug || ! $page_slug ) {
@@ -283,9 +411,14 @@ final class HMPS_Virtual_Pages {
 
 		// Apply Elementor meta fields if present.
 		foreach ( array( '_elementor_data', '_elementor_edit_mode', '_elementor_template_type', '_elementor_version', '_wp_page_template' ) as $k ) {
-			if ( isset( $meta[ $k ] ) ) {
-				update_post_meta( $pid, $k, $meta[ $k ] );
+			if ( ! isset( $meta[ $k ] ) ) {
+				continue;
 			}
+			$val = $meta[ $k ];
+			if ( '_elementor_data' === $k ) {
+				$val = self::patch_elementor_media_urls( (string) $val, $package_dir, $demo_slug );
+			}
+			update_post_meta( $pid, $k, $val );
 		}
 
 		$opt[ $cache_key ] = $pid;

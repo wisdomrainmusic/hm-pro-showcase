@@ -3,6 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// $slug = demo slug (already in template context).
+
 $pkg  = isset( $GLOBALS['hmps_demo_package'] ) && is_array( $GLOBALS['hmps_demo_package'] ) ? $GLOBALS['hmps_demo_package'] : array();
 $slug = isset( $GLOBALS['hmps_demo_slug'] ) ? (string) $GLOBALS['hmps_demo_slug'] : '';
 $path = isset( $GLOBALS['hmps_demo_path'] ) ? (string) $GLOBALS['hmps_demo_path'] : '';
@@ -59,6 +61,89 @@ get_header();
 
 	<script>
 	(function(){
+		// Hard lock: any internal navigation must stay inside the active demo scope.
+		var ACTIVE_DEMO = <?php echo wp_json_encode( (string) $slug ); ?>;
+		var PREVIEW_BASE = <?php echo wp_json_encode( '/' . HMPS_Preview_Context::preview_base_slug() . '/' ); ?>; // e.g. "/showcase/"
+
+		function isSkippableHref(href){
+			if(!href) return true;
+			href = String(href);
+			if(href[0] === '#') return true;
+			var lower = href.toLowerCase();
+			if(lower.indexOf('mailto:') === 0) return true;
+			if(lower.indexOf('tel:') === 0) return true;
+			if(lower.indexOf('javascript:') === 0) return true;
+			return false;
+		}
+
+		function isAdminPath(pathname){
+			return /^\/(wp-admin|wp-login\.php)\b/i.test(pathname || '');
+		}
+
+		function normalizeToActiveDemo(urlObj){
+			// Keep query/hash
+			var path = urlObj.pathname || '/';
+			var search = urlObj.search || '';
+			var hash = urlObj.hash || '';
+
+			// Never rewrite admin URLs
+			if(isAdminPath(path)) return null;
+
+			// If already in /showcase/<demo>/... but demo differs, replace it
+			if(path.indexOf(PREVIEW_BASE) === 0){
+				// path like /showcase/<something>/rest
+				var rest = path.substring(PREVIEW_BASE.length); // "<something>/rest"
+				var parts = rest.split('/').filter(Boolean);
+				if(parts.length >= 1){
+					parts[0] = ACTIVE_DEMO;
+					return PREVIEW_BASE + parts.join('/') + '/' + search + hash;
+				}
+				// /showcase/ only -> go to active demo root
+				return PREVIEW_BASE + ACTIVE_DEMO + '/' + search + hash;
+			}
+
+			// Any other same-origin path => force into /showcase/<demo>/<path>
+			path = path.replace(/^\/+/, ''); // trim leading slashes
+			return PREVIEW_BASE + ACTIVE_DEMO + '/' + path + search + hash;
+		}
+
+		document.addEventListener('click', function(ev){
+			var a = ev.target && ev.target.closest ? ev.target.closest('a') : null;
+			if(!a) return;
+
+			// Existing close handler (Exit) should work as-is.
+			if(a.hasAttribute('data-hmps-exit')) return;
+
+			var href = a.getAttribute('href');
+			if(isSkippableHref(href)) return;
+
+			// Let new-tab / modifier clicks behave normally
+			if(ev.defaultPrevented) return;
+			if(ev.button && ev.button !== 0) return;
+			if(ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+			if(a.target && a.target !== '' && a.target !== '_self') return;
+			if(a.hasAttribute('download')) return;
+
+			var url;
+			try {
+				url = new URL(href, window.location.href);
+			} catch(e){
+				return;
+			}
+
+			// Only same-origin should be forced into demo scope
+			if(url.origin !== window.location.origin) return;
+
+			var next = normalizeToActiveDemo(url);
+			if(!next) return;
+
+			// If already correct, allow default navigation
+			if(next === (url.pathname + url.search + url.hash)) return;
+
+			ev.preventDefault();
+			window.location.assign(next);
+		}, true);
+
 		// If this demo is running inside the Showcase modal iframe, let the parent close the modal.
 		function isInIframe(){
 			try { return window.self !== window.top; } catch(e){ return true; }
