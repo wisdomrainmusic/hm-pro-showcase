@@ -28,6 +28,20 @@ final class HMPS_Shortcodes {
 
 		wp_enqueue_style( 'hmps-showcase' );
 		wp_enqueue_script( 'hmps-showcase' );
+
+		// Localize runtime preview endpoint + runtime keys.
+		if ( ! class_exists( 'HMPS_Admin' ) ) {
+			require_once HMPS_PLUGIN_DIR . 'inc/admin/class-hmps-admin.php';
+		}
+		$runtimes = HMPS_Admin::get_player_runtimes();
+		wp_localize_script(
+			'hmps-showcase',
+			'HMPS_SHOWCASE',
+			array(
+				'previewEndpoint' => esc_url_raw( rest_url( 'hmps/v1/showcase/preview' ) ),
+				'runtimeKeys'     => array_values( array_keys( $runtimes ) ),
+			)
+		);
 	}
 
 	private static function slug_to_label( string $slug ) : string {
@@ -201,7 +215,9 @@ final class HMPS_Shortcodes {
 									<div class="hmps-desc"><?php echo esc_html( $desc ); ?></div>
 								<?php endif; ?>
 
-								<!-- preview/player integration will be added in the next phase -->
+								<div class="hmps-actions">
+									<button type="button" class="hmps-preview" data-slug="<?php echo esc_attr( $slug ); ?>">Önizle</button>
+								</div>
 							</div>
 						</article>
 					<?php endforeach; ?>

@@ -80,7 +80,72 @@
     // initial
     apply();
 
-    // Preview/player integration intentionally removed in showcase-only mode.
+    // Preview: apply demo on runtime then open runtime URL.
+    function ensureOverlay(){
+      var ov = qs(root, '.hmps-overlay');
+      if(ov) return ov;
+      ov = document.createElement('div');
+      ov.className = 'hmps-overlay';
+      ov.innerHTML = '<div class="hmps-overlay__card"><div class="hmps-overlay__title">Demo yükleniyor...</div><div class="hmps-overlay__sub">Lütfen bekleyin</div></div>';
+      ov.style.display = 'none';
+      root.appendChild(ov);
+      return ov;
+    }
+
+    function pickRuntimeKey(){
+      try {
+        if(window.HMPS_SHOWCASE && Array.isArray(window.HMPS_SHOWCASE.runtimeKeys) && window.HMPS_SHOWCASE.runtimeKeys.length){
+          return window.HMPS_SHOWCASE.runtimeKeys[0];
+        }
+      } catch(e){}
+      return 'rt1';
+    }
+
+    function requestPreview(slug){
+      var endpoint = (window.HMPS_SHOWCASE && window.HMPS_SHOWCASE.previewEndpoint) ? window.HMPS_SHOWCASE.previewEndpoint : '';
+      if(!endpoint){
+        alert('Preview endpoint not configured.');
+        return;
+      }
+
+      var overlay = ensureOverlay();
+      overlay.style.display = 'flex';
+
+      var payload = {
+        slug: slug,
+        runtime: pickRuntimeKey()
+      };
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, status: r.status, json: j }; }); })
+      .then(function(res){
+        overlay.style.display = 'none';
+        if(!res.ok || !res.json || !res.json.ok){
+          var msg = (res.json && res.json.message) ? res.json.message : 'Preview failed.';
+          alert(msg);
+          return;
+        }
+        var url = res.json.redirect_to || res.json.runtime;
+        if(url){
+          window.open(url, '_blank');
+        }
+      })
+      .catch(function(err){
+        overlay.style.display = 'none';
+        alert(err && err.message ? err.message : 'Preview request error.');
+      });
+    }
+
+    qsa(root, '.hmps-preview').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var slug = btn.getAttribute('data-slug') || '';
+        if(slug) requestPreview(slug);
+      });
+    });
   }
 
   document.addEventListener('DOMContentLoaded', function(){

@@ -74,12 +74,37 @@ final class HMPS_Admin {
 			'hmps_settings_main'
 		);
 
-		// Showcase-only mode: no preview settings.
+		add_settings_section(
+			'hmps_settings_player',
+			__( 'Player Settings (Local Test)', 'hm-pro-showcase' ),
+			static function() {
+				echo '<p>' . esc_html__( 'Used by the Showcase “Preview” button to apply a package on a runtime site (rt1/rt2) without admin login. Install this plugin on the runtime sites too.', 'hm-pro-showcase' ) . '</p>';
+			},
+			'hmps_settings'
+		);
+
+		add_settings_field(
+			'player_secret',
+			__( 'Player shared secret', 'hm-pro-showcase' ),
+			array( __CLASS__, 'field_player_secret' ),
+			'hmps_settings',
+			'hmps_settings_player'
+		);
+
+		add_settings_field(
+			'player_runtime_urls',
+			__( 'Runtime URLs (one per line)', 'hm-pro-showcase' ),
+			array( __CLASS__, 'field_player_runtime_urls' ),
+			'hmps_settings',
+			'hmps_settings_player'
+		);
 	}
 
 	public static function get_settings() : array {
 		$defaults = array(
 			'packages_base_dir' => '',
+			'player_secret'     => '',
+			'player_runtime_urls' => "rt1|http://localhost/player-rt1\nrt2|http://localhost/player-rt2",
 		);
 		$opt = get_option( 'hmps_settings', array() );
 		if ( ! is_array( $opt ) ) {
@@ -104,6 +129,11 @@ final class HMPS_Admin {
 			wp_mkdir_p( $merged['packages_base_dir'] );
 		}
 
+		// Ensure secret exists (generated once).
+		if ( empty( $merged['player_secret'] ) ) {
+			$merged['player_secret'] = wp_generate_password( 32, false, false );
+		}
+
 		return $merged;
 	}
 
@@ -120,14 +150,56 @@ final class HMPS_Admin {
 			$out['packages_base_dir'] = $dir;
 		}
 
+		if ( isset( $input['player_secret'] ) ) {
+			$sec = trim( (string) wp_unslash( $input['player_secret'] ) );
+			// Keep simple; do not force regeneration if user pasted a fixed key.
+			$out['player_secret'] = $sec;
+		}
+
+		if ( isset( $input['player_runtime_urls'] ) ) {
+			$lines = (string) wp_unslash( $input['player_runtime_urls'] );
+			$lines = str_replace( "\r", '', $lines );
+			$out['player_runtime_urls'] = trim( $lines );
+		}
+
 		// Ensure directory exists on save.
 		if ( ! empty( $out['packages_base_dir'] ) && ! is_dir( $out['packages_base_dir'] ) ) {
 			wp_mkdir_p( $out['packages_base_dir'] );
 		}
 
-		// Showcase-only mode: ignore preview fields if present.
+		// Showcase-only mode: ignore legacy preview fields if present.
 
 		return $out;
+	}
+
+	public static function get_player_runtimes() : array {
+		$settings = self::get_settings();
+		$raw      = (string) ( $settings['player_runtime_urls'] ?? '' );
+		$lines    = preg_split( '/\r\n|\r|\n/', $raw );
+		$out      = array();
+
+		foreach ( (array) $lines as $line ) {
+			$line = trim( (string) $line );
+			if ( '' === $line ) {
+				continue;
+			}
+			// Format: key|url
+			$parts = array_map( 'trim', explode( '|', $line, 2 ) );
+			$key   = sanitize_key( (string) ( $parts[0] ?? '' ) );
+			$url   = (string) ( $parts[1] ?? '' );
+			$url   = esc_url_raw( $url );
+			if ( '' === $key || '' === $url ) {
+				continue;
+			}
+			$out[ $key ] = rtrim( $url, '/' );
+		}
+
+		return $out;
+	}
+
+	public static function get_player_secret() : string {
+		$settings = self::get_settings();
+		return (string) ( $settings['player_secret'] ?? '' );
 	}
 
 	/**
@@ -293,6 +365,20 @@ final class HMPS_Admin {
 			esc_attr__( 'e.g. /var/www/.../wp-content/uploads/hmpro-demo-packages', 'hm-pro-showcase' )
 		);
 		echo '<p class="description">' . esc_html__( 'Single filesystem directory where demo packages live (each package is a folder with demo.json). This directory is used by the Showcase UI.', 'hm-pro-showcase' ) . '</p>';
+	}
+
+	public static function field_player_secret() : void {
+		$settings = self::get_settings();
+		$val      = (string) ( $settings['player_secret'] ?? '' );
+		echo '<input type="text" name="hmps_settings[player_secret]" value="' . esc_attr( $val ) . '" class="regular-text" />';
+		echo '<p class="description">' . esc_html__( 'Must be the same on the Showcase site and all runtime sites (rt1/rt2).', 'hm-pro-showcase' ) . '</p>';
+	}
+
+	public static function field_player_runtime_urls() : void {
+		$settings = self::get_settings();
+		$val      = (string) ( $settings['player_runtime_urls'] ?? '' );
+		echo '<textarea name="hmps_settings[player_runtime_urls]" rows="5" class="large-text code">' . esc_textarea( $val ) . '</textarea>';
+		echo '<p class="description">' . esc_html__( 'Format: key|url (example: rt1|http://localhost/player-rt1). Used by the Preview button to pick a runtime.', 'hm-pro-showcase' ) . '</p>';
 	}
 
 

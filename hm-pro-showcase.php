@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HM Pro Showcase
  * Description: Showcase library UI (category tabs + search) for HM Pro theme demo packages.
- * Version: 0.3.0
+ * Version: 0.4.0
  * Author: Wisdom Rain Music
  * License: GPLv2 or later
  * Text Domain: hm-pro-showcase
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HMPS_VERSION', '0.3.0' );
+define( 'HMPS_VERSION', '0.4.0' );
 define( 'HMPS_PLUGIN_FILE', __FILE__ );
 define( 'HMPS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HMPS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -47,6 +47,8 @@ final class HMPS_Plugin {
 function hmps_activate() : void {
 	$defaults = array(
 		'packages_base_dir' => '',
+		'player_secret'     => '',
+		'player_runtime_urls' => "rt1|http://localhost/player-rt1\nrt2|http://localhost/player-rt2",
 	);
 
 	$existing = get_option( 'hmps_settings', array() );
@@ -66,6 +68,11 @@ function hmps_activate() : void {
 	// Ensure directory exists.
 	if ( ! is_dir( $merged['packages_base_dir'] ) ) {
 		wp_mkdir_p( $merged['packages_base_dir'] );
+	}
+
+	// Ensure player secret exists.
+	if ( empty( $merged['player_secret'] ) ) {
+		$merged['player_secret'] = wp_generate_password( 32, false, false );
 	}
 
 	update_option( 'hmps_settings', $merged, false );
