@@ -47,9 +47,18 @@ final class HMPS_Preview_Context {
 
 		$home = rtrim( home_url( '/' ), '/' );
 
-		// already demo
+		// already this demo
 		if ( preg_match( '#/' . preg_quote( self::preview_base(), '#' ) . '/' . preg_quote( $demo, '#' ) . '/#i', $url ) ) {
 			return $url;
+		}
+
+		// if it points to another demo slug, normalize to current demo.
+		$base = preg_quote( self::preview_base(), '#' );
+		if ( preg_match( '#/' . $base . '/([^/]+)/#i', $url, $m ) ) {
+			$other = sanitize_title( (string) ( $m[1] ?? '' ) );
+			if ( $other && $other !== $demo ) {
+				$url = preg_replace( '#/' . $base . '/' . preg_quote( $other, '#' ) . '/#i', '/' . self::preview_base() . '/' . $demo . '/', $url, 1 );
+			}
 		}
 
 		// absolute same-site -> make relative first

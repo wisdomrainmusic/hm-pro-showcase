@@ -117,6 +117,13 @@
           closeModal();
         }
       });
+
+      // Allow iframe to request close (Exit/Showcase buttons inside demo shell).
+      window.addEventListener('message', function(ev){
+        var d = ev && ev.data ? ev.data : null;
+        if(!d || typeof d !== 'object') return;
+        if(d.hmps === 'close'){ closeModal(); }
+      });
     }
   }
 
