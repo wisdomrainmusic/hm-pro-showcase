@@ -8,6 +8,7 @@ require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-virtual-pages.php';
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-context.php';
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-menu-rewrite.php';
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-package-menu.php';
+require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-snapshot.php';
 
 /**
  * Preview Router Core
@@ -104,6 +105,10 @@ final class HMPS_Preview_Router {
 		$GLOBALS['hmps_demo_resolved']      = $resolved;
 		$GLOBALS['hmps_demo_package']       = $package;
 		$GLOBALS['hmps_packages_base_dir']  = (string) $settings['packages_base_dir'];
+
+		// Apply exporter snapshot overrides in preview context.
+		$package_dir = wp_normalize_path( trailingslashit( (string) $settings['packages_base_dir'] ) . $demo_slug );
+		HMPS_Preview_Snapshot::boot( $package_dir );
 
 		$template = HMPS_PLUGIN_DIR . 'templates/demo-shell.php';
 		if ( ! file_exists( $template ) ) {
