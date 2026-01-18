@@ -9,6 +9,7 @@ require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-context.php';
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-menu-rewrite.php';
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-package-menu.php';
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-snapshot.php';
+require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-media.php';
 
 /**
  * Preview Router Core
@@ -94,6 +95,15 @@ final class HMPS_Preview_Router {
 			exit;
 		}
 
+		$package_dir = wp_normalize_path( trailingslashit( (string) $settings['packages_base_dir'] ) . $demo_slug );
+
+		// Serve packaged media files inside preview scope:
+		// /<preview_base>/<demo>/media/<rel_path>
+		if ( $path && 0 === strpos( $path, 'media/' ) ) {
+			$rel = substr( $path, 6 );
+			HMPS_Preview_Media::serve( $package_dir, $rel );
+		}
+
 		// Takeover: do NOT look up WP pages anymore.
 		// We will render demo content virtually from the package files in next commits.
 		$front_slug = sanitize_title( (string) ( $package['front_page_slug'] ?? '' ) );
@@ -107,7 +117,6 @@ final class HMPS_Preview_Router {
 		$GLOBALS['hmps_packages_base_dir']  = (string) $settings['packages_base_dir'];
 
 		// Apply exporter snapshot overrides in preview context.
-		$package_dir = wp_normalize_path( trailingslashit( (string) $settings['packages_base_dir'] ) . $demo_slug );
 		HMPS_Preview_Snapshot::boot( $package_dir );
 
 		$template = HMPS_PLUGIN_DIR . 'templates/demo-shell.php';
