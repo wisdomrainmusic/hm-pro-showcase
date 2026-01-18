@@ -40,6 +40,7 @@ final class HMPS_Shortcodes {
 			array(
 				'previewEndpoint' => esc_url_raw( rest_url( 'hmps/v1/showcase/preview' ) ),
 				'runtimeKeys'     => array_values( array_keys( $runtimes ) ),
+				'coverUrl'        => HMPS_PLUGIN_URL . 'assets/images/cover.jpg',
 			)
 		);
 	}
