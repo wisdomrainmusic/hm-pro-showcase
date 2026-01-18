@@ -196,13 +196,21 @@ final class HMPS_Shortcodes {
 								<?php endif; ?>
 
 								<div class="hmps-actions">
-									<a class="hmps-btn" href="<?php echo esc_url( $preview ); ?>">Önizle</a>
+									<a class="hmps-btn hmps-preview-open" href="<?php echo esc_url( $preview ); ?>" data-preview-url="<?php echo esc_url( $preview ); ?>">Önizle</a>
 								</div>
 							</div>
 						</article>
 					<?php endforeach; ?>
 				</div>
 			<?php endif; ?>
+
+			<div class="hmps-modal" aria-hidden="true">
+				<div class="hmps-modal__backdrop" data-hmps-close></div>
+				<div class="hmps-modal__panel" role="dialog" aria-modal="true" aria-label="Demo Önizleme">
+					<button type="button" class="hmps-modal__close" data-hmps-close aria-label="Kapat">×</button>
+					<iframe class="hmps-modal__frame" title="Demo Preview" loading="lazy"></iframe>
+				</div>
+			</div>
 		</div>
 		<?php
 		return (string) ob_get_clean();

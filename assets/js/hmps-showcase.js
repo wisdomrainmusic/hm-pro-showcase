@@ -79,6 +79,45 @@
 
     // initial
     apply();
+
+    // Preview modal (Astra-like): open preview inside an iframe overlay.
+    var modal = qs(root, '.hmps-modal');
+    var frame = modal ? qs(modal, '.hmps-modal__frame') : null;
+    function openModal(url){
+      if(!modal || !frame || !url) return;
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden','false');
+      frame.setAttribute('src', url);
+      document.documentElement.classList.add('hmps-modal-open');
+    }
+    function closeModal(){
+      if(!modal || !frame) return;
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden','true');
+      frame.setAttribute('src','');
+      document.documentElement.classList.remove('hmps-modal-open');
+    }
+
+    qsa(root, '.hmps-preview-open').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var url = a.getAttribute('data-preview-url') || a.getAttribute('href');
+        if(modal && frame){
+          e.preventDefault();
+          openModal(url);
+        }
+      });
+    });
+
+    if(modal){
+      qsa(modal, '[data-hmps-close]').forEach(function(btn){
+        btn.addEventListener('click', function(){ closeModal(); });
+      });
+      document.addEventListener('keydown', function(ev){
+        if(ev.key === 'Escape' && modal.classList.contains('is-open')){
+          closeModal();
+        }
+      });
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function(){
