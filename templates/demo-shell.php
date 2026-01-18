@@ -38,24 +38,21 @@ get_header();
 	<?php
 	// Showcase page (front list) – default /a1/ but can be overridden later via setting.
 	$showcase_url = HMPS_Preview_Context::showcase_url();
-	// Exit can go to homepage now; later we can redirect to pricing/product.
-	$exit_url = home_url( '/' );
+	// Exit should return to showcase list.
+	$exit_url = $showcase_url;
 	?>
 	<div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px;">
 		<div>
 			<div style="font-size:13px;color:#666;margin-bottom:4px;">
 				<?php echo esc_html( (string) ( $pkg['title'] ?? $slug ) ); ?>
 			</div>
-			<h1 style="margin:0;font-size:24px;line-height:1.2;">
+			<div style="font-size:18px;line-height:1.2;font-weight:600;margin:0;">
 				<?php echo esc_html( $page['found'] ? ( $page['title'] ? $page['title'] : $page_slug ) : $page_slug ); ?>
-			</h1>
+			</div>
 		</div>
 		<div style="display:flex;gap:10px;align-items:center;">
 			<a href="<?php echo esc_url( $exit_url ); ?>" data-hmps-exit style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
 				<?php echo esc_html__( 'Exit', 'hm-pro-showcase' ); ?>
-			</a>
-			<a href="<?php echo esc_url( $showcase_url ); ?>" data-hmps-showcase style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
-				<?php echo esc_html__( 'Showcase', 'hm-pro-showcase' ); ?>
 			</a>
 		</div>
 	</div>
@@ -78,10 +75,6 @@ get_header();
 			var a = ev.target && ev.target.closest ? ev.target.closest('a') : null;
 			if(!a) return;
 			if(a.hasAttribute('data-hmps-exit')){
-				ev.preventDefault();
-				sendClose('exit');
-			}
-			if(a.hasAttribute('data-hmps-showcase')){
 				ev.preventDefault();
 				sendClose('showcase');
 			}

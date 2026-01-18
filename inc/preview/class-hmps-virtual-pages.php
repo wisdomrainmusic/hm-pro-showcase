@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 final class HMPS_Virtual_Pages {
+	/** @var array<string,int> */
+	private static $preview_posts_cache = array();
+
 	public static function package_dir_from_globals() : string {
 		$slug = isset( $GLOBALS['hmps_demo_slug'] ) ? (string) $GLOBALS['hmps_demo_slug'] : '';
 		$base = isset( $GLOBALS['hmps_packages_base_dir'] ) ? (string) $GLOBALS['hmps_packages_base_dir'] : '';
@@ -40,8 +43,8 @@ final class HMPS_Virtual_Pages {
 					return 'href=' . $q . $u . $q;
 				}
 
-				// Avoid double-prefixing if already in demo.
-				if ( preg_match( '#^/demo/#i', $u ) ) {
+				// Avoid double-prefixing if already in preview base.
+				if ( 0 === strpos( $u, $base ) ) {
 					return 'href=' . $q . $u . $q;
 				}
 
@@ -60,12 +63,57 @@ final class HMPS_Virtual_Pages {
 	}
 
 	/**
+	 * Try to detect the source site URL (e.g. localhost/demo-test-2)
+	 * so we can rewrite absolute URLs back into the preview scope.
+	 */
+	private static function get_source_site_url( string $package_dir ) : string {
+		$package_dir = wp_normalize_path( $package_dir );
+		$file        = trailingslashit( $package_dir ) . 'media.json';
+		if ( ! file_exists( $file ) ) {
+			return '';
+		}
+		$json = file_get_contents( $file );
+		if ( ! $json ) {
+			return '';
+		}
+		$data = json_decode( $json, true );
+		if ( ! is_array( $data ) ) {
+			return '';
+		}
+		$base = isset( $data['source_upload_baseurl'] ) ? (string) $data['source_upload_baseurl'] : '';
+		if ( ! $base ) {
+			return '';
+		}
+		// Convert uploads base to site root.
+		$base = rtrim( $base, '/' );
+		$base = preg_replace( '#/wp-content/uploads$#i', '', $base );
+		return (string) $base;
+	}
+
+	private static function rewrite_exported_absolute_urls( string $html, string $package_dir, string $demo_slug ) : string {
+		$src = self::get_source_site_url( $package_dir );
+		if ( ! $src ) {
+			return $html;
+		}
+		$src  = rtrim( $src, '/' );
+		$home = rtrim( home_url( '/' ), '/' );
+		if ( ! $home ) {
+			return $html;
+		}
+		// First, map exported site to current site.
+		$html = str_replace( $src . '/', $home . '/', $html );
+		// Then, keep navigation inside demo scope.
+		return self::rewrite_internal_links( $html, $demo_slug );
+	}
+
+	/**
 	 * Load pages.json from a package directory and return a map keyed by slug.
 	 *
 	 * Supports multiple key styles because exports may vary:
 	 * - slug / post_name / name
 	 * - title / post_title
 	 * - content / post_content / html
+	 * - meta (optional)
 	 */
 	public static function load_pages_map( string $package_dir ) : array {
 		$package_dir = wp_normalize_path( $package_dir );
@@ -124,10 +172,16 @@ final class HMPS_Virtual_Pages {
 				$content = (string) $p['html'];
 			}
 
+			$meta = array();
+			if ( isset( $p['meta'] ) && is_array( $p['meta'] ) ) {
+				$meta = $p['meta'];
+			}
+
 			$map[ $slug ] = array(
 				'slug'    => $slug,
 				'title'   => $title,
 				'content' => $content,
+				'meta'    => $meta,
 			);
 		}
 
@@ -151,19 +205,93 @@ final class HMPS_Virtual_Pages {
 
 		$title   = (string) ( $map[ $page_slug ]['title'] ?? '' );
 		$content = (string) ( $map[ $page_slug ]['content'] ?? '' );
+		$meta    = isset( $map[ $page_slug ]['meta' ] ) && is_array( $map[ $page_slug ]['meta' ] ) ? $map[ $page_slug ]['meta' ] : array();
 
-		// Let WP format shortcodes/content like normal pages.
-		// (We will add internal link rewriting in the next commit.)
-		$content = do_shortcode( $content );
-		$content = apply_filters( 'the_content', $content );
+		// Elementor pages: render via a temporary preview post so Elementor can hydrate widgets.
+		$rendered = '';
+		if ( ! empty( $meta['_elementor_data'] ) && class_exists( '\\Elementor\\Plugin' ) ) {
+			$post_id = self::ensure_preview_post( $demo_slug, $page_slug, $title, $content, $meta );
+			if ( $post_id ) {
+				try {
+					$rendered = (string) \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $post_id, true );
+				} catch ( \Throwable $e ) {
+					$rendered = '';
+				}
+			}
+		}
+		if ( $rendered ) {
+			$content = $rendered;
+		} else {
+			// Let WP format shortcodes/content like normal pages.
+			$content = do_shortcode( $content );
+			$content = apply_filters( 'the_content', $content );
+		}
 
-		// Keep navigation inside demo scope.
-		$content = self::rewrite_internal_links( $content, $demo_slug );
+		// Rewrite exported absolute URLs (demo-test-2 etc.) and keep navigation inside demo scope.
+		$content = self::rewrite_exported_absolute_urls( $content, $package_dir, $demo_slug );
 
 		return array(
 			'found'   => true,
 			'title'   => $title,
 			'content' => $content,
 		);
+	}
+
+	/**
+	 * Create or reuse a hidden preview post for Elementor rendering.
+	 */
+	private static function ensure_preview_post( string $demo_slug, string $page_slug, string $title, string $content, array $meta ) : int {
+		$demo_slug = sanitize_title( $demo_slug );
+		$page_slug = sanitize_title( $page_slug );
+		if ( ! $demo_slug || ! $page_slug ) {
+			return 0;
+		}
+
+		$cache_key = $demo_slug . '::' . $page_slug;
+		if ( isset( self::$preview_posts_cache[ $cache_key ] ) ) {
+			return (int) self::$preview_posts_cache[ $cache_key ];
+		}
+
+		// Persistent mapping across requests.
+		$opt = get_option( 'hmps_preview_posts', array() );
+		$opt = is_array( $opt ) ? $opt : array();
+		if ( isset( $opt[ $cache_key ] ) ) {
+			$pid = (int) $opt[ $cache_key ];
+			if ( $pid > 0 && get_post( $pid ) ) {
+				self::$preview_posts_cache[ $cache_key ] = $pid;
+				return $pid;
+			}
+		}
+
+		$post_name = 'hmps-preview-' . $demo_slug . '-' . $page_slug;
+		$postarr   = array(
+			'post_type'    => 'page',
+			'post_status'  => 'draft',
+			'post_title'   => $title ? $title : $page_slug,
+			'post_name'    => sanitize_title( $post_name ),
+			'post_content' => $content,
+		);
+		$pid = wp_insert_post( $postarr, true );
+		if ( is_wp_error( $pid ) ) {
+			return 0;
+		}
+		$pid = (int) $pid;
+
+		update_post_meta( $pid, '_hmps_is_preview', 1 );
+		update_post_meta( $pid, '_hmps_demo_slug', $demo_slug );
+		update_post_meta( $pid, '_hmps_page_slug', $page_slug );
+
+		// Apply Elementor meta fields if present.
+		foreach ( array( '_elementor_data', '_elementor_edit_mode', '_elementor_template_type', '_elementor_version', '_wp_page_template' ) as $k ) {
+			if ( isset( $meta[ $k ] ) ) {
+				update_post_meta( $pid, $k, $meta[ $k ] );
+			}
+		}
+
+		$opt[ $cache_key ] = $pid;
+		update_option( 'hmps_preview_posts', $opt, false );
+
+		self::$preview_posts_cache[ $cache_key ] = $pid;
+		return $pid;
 	}
 }
