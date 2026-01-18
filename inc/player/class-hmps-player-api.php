@@ -153,7 +153,7 @@ final class HMPS_Player_API {
 		}
 
 		try {
-			$result = hmpro_demo_run_apply( $slug, array( 'silent' => true ) );
+            $result = hmpro_demo_run_apply( $slug, array( 'silent' => true, 'replace' => true ) );
 		} catch ( Exception $e ) {
 			return new WP_REST_Response( array( 'ok' => false, 'message' => $e->getMessage() ), 500 );
 		}
