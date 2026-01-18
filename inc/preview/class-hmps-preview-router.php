@@ -10,6 +10,7 @@ require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-menu-rewrite.php';
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-package-menu.php';
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-snapshot.php';
 require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-media.php';
+require_once HMPS_PLUGIN_DIR . 'inc/preview/class-hmps-preview-products.php';
 
 /**
  * Preview Router Core
@@ -118,6 +119,9 @@ final class HMPS_Preview_Router {
 
 		// Apply exporter snapshot overrides in preview context.
 		HMPS_Preview_Snapshot::boot( $package_dir );
+
+		// Create virtual WooCommerce products + attachments for this demo (if present).
+		HMPS_Preview_Products::boot( $package_dir, $demo_slug );
 
 		$template = HMPS_PLUGIN_DIR . 'templates/demo-shell.php';
 		if ( ! file_exists( $template ) ) {
