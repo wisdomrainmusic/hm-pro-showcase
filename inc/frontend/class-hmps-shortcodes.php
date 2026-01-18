@@ -141,7 +141,7 @@ final class HMPS_Shortcodes {
 
 		ob_start();
 		?>
-		<div class="hmps-showcase" data-default-cat="<?php echo esc_attr( $default_cat ); ?>">
+		<div class="hmps-showcase-root hmps-showcase" data-default-cat="<?php echo esc_attr( $default_cat ); ?>">
 			<div class="hmps-toolbar">
 				<div class="hmps-tabs" role="tablist" aria-label="Showcase Kategorileri">
 					<button type="button" class="hmps-tab is-active" data-cat="all">Tümü</button>
