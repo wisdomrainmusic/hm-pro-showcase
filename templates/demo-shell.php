@@ -51,14 +51,43 @@ get_header();
 			</h1>
 		</div>
 		<div style="display:flex;gap:10px;align-items:center;">
-			<a href="<?php echo esc_url( $exit_url ); ?>" style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
+			<a href="<?php echo esc_url( $exit_url ); ?>" data-hmps-exit style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
 				<?php echo esc_html__( 'Exit', 'hm-pro-showcase' ); ?>
 			</a>
-			<a href="<?php echo esc_url( $showcase_url ); ?>" style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
+			<a href="<?php echo esc_url( $showcase_url ); ?>" data-hmps-showcase style="text-decoration:none;border:1px solid #ddd;padding:8px 12px;border-radius:10px;background:#fff;">
 				<?php echo esc_html__( 'Showcase', 'hm-pro-showcase' ); ?>
 			</a>
 		</div>
 	</div>
+
+	<script>
+	(function(){
+		// If this demo is running inside the Showcase modal iframe, let the parent close the modal.
+		function isInIframe(){
+			try { return window.self !== window.top; } catch(e){ return true; }
+		}
+		if(!isInIframe()) return;
+
+		function sendClose(mode){
+			try {
+				window.parent.postMessage({ hmps: 'close', mode: mode || 'close' }, '*');
+			} catch(e) {}
+		}
+
+		document.addEventListener('click', function(ev){
+			var a = ev.target && ev.target.closest ? ev.target.closest('a') : null;
+			if(!a) return;
+			if(a.hasAttribute('data-hmps-exit')){
+				ev.preventDefault();
+				sendClose('exit');
+			}
+			if(a.hasAttribute('data-hmps-showcase')){
+				ev.preventDefault();
+				sendClose('showcase');
+			}
+		}, true);
+	})();
+	</script>
 
 	<?php if ( ! $page['found'] ) : ?>
 		<div style="padding:14px;border:1px dashed #bbb;border-radius:14px;background:#fafafa;">

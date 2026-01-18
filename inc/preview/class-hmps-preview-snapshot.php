@@ -68,9 +68,32 @@ final class HMPS_Preview_Snapshot {
 
 		// Elementor compiled CSS.
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_elementor_css' ), 1 );
+		// Ensure Elementor frontend scripts/styles are available in the preview shell.
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_elementor_frontend_assets' ), 2 );
 		add_action( 'wp_head', array( __CLASS__, 'print_snapshot_debug_meta' ), 1 );
 	}
 
+	/**
+	 * Elementor widgets (sliders, tabs, etc.) require frontend assets.
+	 * In a virtual/preview shell, Elementor may skip enqueuing depending on request context.
+	 */
+	public static function enqueue_elementor_frontend_assets() : void {
+		if ( ! HMPS_Preview_Context::is_preview() ) {
+			return;
+		}
+		if ( ! class_exists( '\Elementor\Plugin' ) ) {
+			return;
+		}
+		try {
+			$plugin = \Elementor\Plugin::$instance;
+			if ( isset( $plugin->frontend ) ) {
+				$plugin->frontend->enqueue_styles();
+				$plugin->frontend->enqueue_scripts();
+			}
+		} catch ( \Throwable $e ) {
+			// Silent fail in preview.
+		}
+	}
 	/**
 	 * Inject Elementor compiled CSS from elementor_css.zip as inline style.
 	 */
