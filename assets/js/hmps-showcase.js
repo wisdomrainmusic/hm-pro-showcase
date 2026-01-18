@@ -116,10 +116,22 @@
       return 'rt1';
     }
 
-    function writeWindowLoading(w){
+    function writeWindowLoading(w, slug){
       try {
         w.document.open();
-        w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Loading...</title></head><body style="font-family:Arial,sans-serif;padding:24px;"><h3>Demo yükleniyor...</h3><p>Lütfen bekleyin.</p></body></html>');
+        w.document.write(
+          '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
+          '<title>Demo Loading</title></head>'+
+          '<body style="margin:0;font-family:Arial,sans-serif;background:#0b0d12;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;">'+
+            '<div style="text-align:center;max-width:520px;padding:24px;">'+
+              '<div style="width:54px;height:54px;border:4px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:999px;margin:0 auto 16px;animation:spin 1s linear infinite"></div>'+
+              '<h3 style="margin:0 0 8px;font-size:22px;line-height:1.2">Demo is being prepared…</h3>'+
+              '<p style="margin:0;opacity:.85;font-size:14px;line-height:1.5">Please keep this tab open. Redirect will happen automatically.</p>'+
+              (slug ? '<p style="margin:14px 0 0;opacity:.7;font-size:12px">Demo: '+ String(slug).replace(/</g,'&lt;') +'</p>' : '') +
+              '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>'+
+            '</div>'+
+          '</body></html>'
+        );
         w.document.close();
       } catch(e){}
     }
@@ -193,7 +205,7 @@
         } catch(e) { w = null; }
 
         if(w){
-          writeWindowLoading(w);
+          writeWindowLoading(w, slug);
         }
 
         requestPreview(slug, w);
