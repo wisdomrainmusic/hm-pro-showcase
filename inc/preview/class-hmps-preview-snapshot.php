@@ -45,6 +45,13 @@ final class HMPS_Preview_Snapshot {
 			self::hook_widgets( $widgets );
 		}
 
+		// Theme / plugin options (safe apply: hmpro_* only).
+		$options = self::read_json_file( trailingslashit( $package_dir ) . 'options.json' );
+		if ( is_array( $options ) ) {
+			self::$cache['options'] = $options;
+			self::hook_options_allowlist( $options );
+		}
+
 		// Elementor options.
 		$el_opts = self::read_json_file( trailingslashit( $package_dir ) . 'elementor_options.json' );
 		if ( is_array( $el_opts ) ) {
@@ -194,6 +201,33 @@ final class HMPS_Preview_Snapshot {
 			if ( ! is_string( $opt_name ) || $opt_name === '' ) {
 				continue;
 			}
+			$opt_name = sanitize_key( $opt_name );
+			add_filter( 'pre_option_' . $opt_name, function( $value ) use ( $opt_value ) {
+				if ( ! HMPS_Preview_Context::is_preview() ) {
+					return $value;
+				}
+				return $opt_value;
+			}, 50 );
+		}
+	}
+
+	/**
+	 * Apply options.json safely.
+	 *
+	 * Exporter options.json may contain only theme/plugin options for HM Pro,
+	 * but we still keep a strict allowlist to avoid overriding core WP behavior.
+	 */
+	private static function hook_options_allowlist( array $options ) : void {
+		foreach ( $options as $opt_name => $opt_value ) {
+			if ( ! is_string( $opt_name ) || $opt_name === '' ) {
+				continue;
+			}
+
+			// Allow only HM Pro theme option keys (colors/footer/header/presets live here).
+			if ( strpos( $opt_name, 'hmpro_' ) !== 0 && strpos( $opt_name, 'hm_' ) !== 0 ) {
+				continue;
+			}
+
 			$opt_name = sanitize_key( $opt_name );
 			add_filter( 'pre_option_' . $opt_name, function( $value ) use ( $opt_value ) {
 				if ( ! HMPS_Preview_Context::is_preview() ) {
