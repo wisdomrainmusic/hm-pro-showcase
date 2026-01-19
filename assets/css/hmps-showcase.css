@@ -7,7 +7,8 @@
 }
 
 .hmps-showcase-root .hmps-showcase{
-  max-width:1200px;
+  /* Wider canvas so cards can be displayed in larger proportions */
+  max-width:1500px;
   margin:0 auto;
   padding:12px;
   box-sizing:border-box;
@@ -31,8 +32,16 @@
 }
 
 .hmps-showcase-root .hmps-tab{
-  border:1px solid rgba(0,0,0,.12);
-  background:#fff;
+  border:1px solid rgba(0,0,0,.12) !important;
+  border-color:rgba(0,0,0,.12) !important;
+  /* Theme buttons may force white text; harden tab colors for readability */
+  background:#fff !important;
+  color:#111 !important;
+  -webkit-text-fill-color:#111 !important;
+  text-shadow:none !important;
+  background-clip:padding-box;
+  opacity:1 !important;
+  visibility:visible !important;
   padding:8px 12px;
   border-radius:999px;
   cursor:pointer;
@@ -46,9 +55,10 @@
 }
 
 .hmps-showcase-root .hmps-tab.is-active{
-  background:#111;
-  color:#fff;
-  border-color:#111;
+  background:var(--hmps-accent, var(--e-global-color-primary, var(--ast-global-color-0, #111))) !important;
+  border-color:var(--hmps-accent, var(--e-global-color-primary, var(--ast-global-color-0, #111))) !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
 }
 
 .hmps-showcase-root .hmps-controls{
@@ -75,8 +85,19 @@
 
 .hmps-showcase-root .hmps-grid{
   display:grid;
-  grid-template-columns:repeat(4, minmax(0, 1fr));
-  gap:16px;
+  /* Bigger cards by default */
+  grid-template-columns:repeat(auto-fit, minmax(360px, 1fr));
+  gap:22px;
+}
+
+/* Match the wide 3-up layout shown in the theme tiles */
+@media (min-width: 1100px){
+  .hmps-showcase-root .hmps-grid{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
+}
+
+/* Ultra-wide screens can fit 4 cards while staying large */
+@media (min-width: 1800px){
+  .hmps-showcase-root .hmps-grid{ grid-template-columns:repeat(4, minmax(0, 1fr)); }
 }
 
 @media (max-width: 1024px){
