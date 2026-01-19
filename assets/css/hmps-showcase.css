@@ -228,3 +228,47 @@
   text-transform:none !important;
   letter-spacing:normal !important;
 }
+.hmps-pager{
+  display:flex;
+  justify-content:center;
+  margin:18px 0 8px;
+}
+
+.hmps-loadmore{
+  border:1px solid rgba(0,0,0,.12);
+  background:#fff;
+  color:#111;
+  border-radius:999px;
+  padding:10px 16px;
+  font:inherit;
+  font-weight:700;
+  cursor:pointer;
+}
+.hmps-loadmore:hover{ transform: translateY(-1px); }
+
+.hmps-pagination{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.hmps-page{
+  border:1px solid rgba(0,0,0,.12);
+  background:#fff;
+  color:#111;
+  border-radius:999px;
+  padding:8px 12px;
+  font:inherit;
+  font-weight:700;
+  cursor:pointer;
+}
+.hmps-page.is-active{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+.hmps-dots{
+  opacity:.65;
+  padding:0 6px;
+}

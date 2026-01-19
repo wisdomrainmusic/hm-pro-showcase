@@ -14,8 +14,102 @@
     var state = {
       cat: 'all',
       q: '',
-      sort: 'order'
+      sort: 'order',
+      page: 1
     };
+
+    var perPage = parseInt(root.getAttribute('data-per-page') || '12', 10);
+    if(isNaN(perPage) || perPage < 1) perPage = 12;
+    var paging = (root.getAttribute('data-paging') || 'loadmore').toLowerCase();
+    if(['loadmore','pagination','none'].indexOf(paging) === -1) paging = 'loadmore';
+
+    var pager = qs(root, '.hmps-pager');
+    if(!pager){
+      pager = document.createElement('div');
+      pager.className = 'hmps-pager';
+      root.appendChild(pager);
+    }
+
+    function setPage(n){
+      state.page = n;
+    }
+
+    function renderPager(totalVisible){
+      if(!pager) return;
+      pager.innerHTML = '';
+      if(paging === 'none') return;
+      if(totalVisible <= perPage) return;
+
+      var totalPages = Math.ceil(totalVisible / perPage);
+
+      if(paging === 'loadmore'){
+        var shown = Math.min(state.page * perPage, totalVisible);
+        if(shown >= totalVisible) return;
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'hmps-loadmore';
+        btn.textContent = 'Daha fazla yükle';
+        btn.addEventListener('click', function(){
+          setPage(state.page + 1);
+          apply();
+        });
+        pager.appendChild(btn);
+        return;
+      }
+
+      // pagination
+      var wrap = document.createElement('div');
+      wrap.className = 'hmps-pagination';
+
+      function addPageButton(label, page, isActive){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'hmps-page' + (isActive ? ' is-active' : '');
+        b.textContent = String(label);
+        b.addEventListener('click', function(){
+          setPage(page);
+          apply();
+        });
+        wrap.appendChild(b);
+      }
+
+      // prev
+      addPageButton('‹', Math.max(1, state.page - 1), false);
+
+      // compact window
+      var start = Math.max(1, state.page - 2);
+      var end = Math.min(totalPages, state.page + 2);
+
+      if(start > 1){
+        addPageButton(1, 1, state.page === 1);
+        if(start > 2){
+          var dots = document.createElement('span');
+          dots.className = 'hmps-dots';
+          dots.textContent = '…';
+          wrap.appendChild(dots);
+        }
+      }
+
+      for(var i=start;i<=end;i++){
+        addPageButton(i, i, i === state.page);
+      }
+
+      if(end < totalPages){
+        if(end < totalPages - 1){
+          var dots2 = document.createElement('span');
+          dots2.className = 'hmps-dots';
+          dots2.textContent = '…';
+          wrap.appendChild(dots2);
+        }
+        addPageButton(totalPages, totalPages, state.page === totalPages);
+      }
+
+      // next
+      addPageButton('›', Math.min(totalPages, state.page + 1), false);
+
+      pager.appendChild(wrap);
+    }
 
     function apply(){
       var q = (state.q || '').toLowerCase().trim();
@@ -53,6 +147,26 @@
       visible.forEach(function(card){
         grid.appendChild(card);
       });
+
+      // paging visibility (after sort)
+      var totalVisible = visible.length;
+      if(paging !== 'none' && perPage > 0 && totalVisible > 0){
+        var startIdx = 0;
+        var endIdx = totalVisible;
+
+        if(paging === 'loadmore'){
+          endIdx = Math.min(state.page * perPage, totalVisible);
+        } else if(paging === 'pagination'){
+          startIdx = (state.page - 1) * perPage;
+          endIdx = Math.min(startIdx + perPage, totalVisible);
+        }
+
+        visible.forEach(function(card, idx){
+          card.style.display = (idx >= startIdx && idx < endIdx) ? '' : 'none';
+        });
+      }
+
+      renderPager(totalVisible);
     }
 
     tabs.forEach(function(btn){
@@ -60,6 +174,7 @@
         tabs.forEach(function(b){ b.classList.remove('is-active'); });
         btn.classList.add('is-active');
         state.cat = btn.getAttribute('data-cat') || 'all';
+        setPage(1);
         apply();
       });
     });
@@ -67,6 +182,7 @@
     if(search){
       search.addEventListener('input', function(){
         state.q = search.value || '';
+        setPage(1);
         apply();
       });
     }
@@ -74,11 +190,13 @@
     if(sort){
       sort.addEventListener('change', function(){
         state.sort = sort.value || 'order';
+        setPage(1);
         apply();
       });
     }
 
     // initial
+    setPage(1);
     apply();
 
     // Preview: apply demo on runtime then open runtime URL.
