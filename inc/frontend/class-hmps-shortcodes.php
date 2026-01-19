@@ -110,6 +110,24 @@ final class HMPS_Shortcodes {
 	public static function render_showcase( $atts = array() ) : string {
 		self::enqueue_assets();
 
+		$atts = shortcode_atts(
+			array(
+				'per_page' => 12,
+				'paging'   => 'loadmore', // loadmore | pagination
+			),
+			(array) $atts,
+			'hmps_showcase'
+		);
+
+		$per_page = (int) $atts['per_page'];
+		if ( $per_page < 1 ) {
+			$per_page = 12;
+		}
+		$paging = sanitize_key( (string) $atts['paging'] );
+		if ( ! in_array( $paging, array( 'loadmore', 'pagination', 'none' ), true ) ) {
+			$paging = 'loadmore';
+		}
+
 		if ( ! class_exists( 'HMPS_Admin' ) ) {
 			require_once HMPS_PLUGIN_DIR . 'inc/admin/class-hmps-admin.php';
 		}
@@ -147,7 +165,12 @@ final class HMPS_Shortcodes {
 
 		ob_start();
 		?>
-		<div class="hmps-showcase-root hmps-showcase" data-default-cat="<?php echo esc_attr( $default_cat ); ?>">
+		<div
+			class="hmps-showcase-root hmps-showcase"
+			data-default-cat="<?php echo esc_attr( $default_cat ); ?>"
+			data-per-page="<?php echo esc_attr( (string) $per_page ); ?>"
+			data-paging="<?php echo esc_attr( (string) $paging ); ?>"
+		>
 			<div class="hmps-toolbar">
 				<div class="hmps-tabs" role="tablist" aria-label="Showcase Kategorileri">
 					<button type="button" class="hmps-tab is-active" data-cat="all">Tümü</button>
@@ -233,6 +256,8 @@ final class HMPS_Shortcodes {
 						</article>
 					<?php endforeach; ?>
 				</div>
+
+				<div class="hmps-pager" aria-label="Sayfalama"></div>
 			<?php endif; ?>
 		</div>
 		<?php
