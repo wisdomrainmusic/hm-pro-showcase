@@ -1,5 +1,8 @@
 (function(){
+  'use strict';
   var RR_KEY = 'hmps_runtime_rr_index';
+  var AFF_KEY = 'hmps_runtime_affinity_v1';
+  var AFF_TTL = 600; // 10 minutes
   function qs(root, sel){ return root.querySelector(sel); }
   function qsa(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
 
@@ -368,8 +371,7 @@
       try {
         if(window.HMPS_SHOWCASE && Array.isArray(window.HMPS_SHOWCASE.runtimeKeys) && window.HMPS_SHOWCASE.runtimeKeys.length){
           var keys = window.HMPS_SHOWCASE.runtimeKeys.slice(0);
-          // Some environments (privacy modes / strict settings) can block localStorage.
-          // We fall back to sessionStorage, and finally an in-memory counter.
+          // Robust storage fallback: localStorage -> sessionStorage -> in-memory
           function getIdx(){
             var n = 0;
             try {
@@ -385,7 +387,6 @@
             }
             return 0;
           }
-
           function setIdx(n){
             try { window.localStorage.setItem(RR_KEY, String(n)); } catch(e) {}
             try { window.sessionStorage.setItem(RR_KEY, String(n)); } catch(e) {}
@@ -399,6 +400,57 @@
         }
       } catch(e){}
       return 'rt1';
+    }
+
+    function affinityLoad(){
+      var raw = '';
+      try { raw = window.localStorage.getItem(AFF_KEY) || ''; } catch(e) { raw = ''; }
+      if(!raw){
+        try { raw = window.sessionStorage.getItem(AFF_KEY) || ''; } catch(e2) { raw = ''; }
+      }
+      if(!raw) return {};
+      try {
+        var obj = JSON.parse(raw);
+        return (obj && typeof obj === 'object') ? obj : {};
+      } catch(e3) {}
+      return {};
+    }
+
+    function affinitySave(map){
+      var raw = '';
+      try { raw = JSON.stringify(map || {}); } catch(e) { raw = '{}'; }
+      try { window.localStorage.setItem(AFF_KEY, raw); } catch(e2) {}
+      try { window.sessionStorage.setItem(AFF_KEY, raw); } catch(e3) {}
+      window.__HMPS_AFF = map || {};
+    }
+
+    function pickRuntimeForSlug(slug){
+      var keys = (window.HMPS_SHOWCASE && Array.isArray(window.HMPS_SHOWCASE.runtimeKeys)) ? window.HMPS_SHOWCASE.runtimeKeys : [];
+      if(!keys.length) return pickRuntimeKeyRoundRobin();
+
+      var now = Math.floor(Date.now() / 1000);
+      var map = affinityLoad();
+      if(!map || typeof map !== 'object'){
+        map = {};
+      }
+
+      // existing affinity?
+      if(slug && map[slug] && map[slug].rt){
+        var rt = String(map[slug].rt || '');
+        var ts = parseInt(map[slug].ts || '0', 10) || 0;
+        var alive = (rt && keys.indexOf(rt) !== -1 && ts > 0 && (now - ts) <= AFF_TTL);
+        if(alive){
+          return rt;
+        }
+      }
+
+      // else: pick round-robin and stick it
+      var pick = pickRuntimeKeyRoundRobin();
+      if(slug){
+        map[slug] = { rt: pick, ts: now };
+        affinitySave(map);
+      }
+      return pick;
     }
 
     function writeWindowLoading(w, slug, coverUrl){
@@ -455,7 +507,7 @@
 
       var payload = {
         slug: slug,
-        runtime: pickRuntimeKeyRoundRobin()
+        runtime: pickRuntimeForSlug(slug)
       };
 
       fetch(endpoint, {

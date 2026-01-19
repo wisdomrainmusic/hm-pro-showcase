@@ -122,6 +122,8 @@ final class HMPS_Player_API {
 	}
 
 	public static function handle_runtime_apply( WP_REST_Request $req ) : WP_REST_Response {
+		$lock_key = 'hmps_apply_lock';
+
 		$slug  = sanitize_title( (string) $req->get_param( 'slug' ) );
 		$ts    = (int) $req->get_param( 'ts' );
 		$token = (string) $req->get_param( 'token' );
@@ -141,8 +143,37 @@ final class HMPS_Player_API {
 			return new WP_REST_Response( array( 'ok' => false, 'message' => 'Invalid token.' ), 403 );
 		}
 
+		// Cooldown: avoid re-importing the same slug repeatedly on the same runtime.
+		$cooldown_seconds = 120;
+		$cooldown_key     = 'hmps_last_apply_' . md5( $slug );
+		$last_ts          = (int) get_transient( $cooldown_key );
+		if ( $last_ts > 0 && ( time() - $last_ts ) < $cooldown_seconds ) {
+			return new WP_REST_Response(
+				array(
+					'ok'          => true,
+					'redirect_to' => home_url( '/' ),
+					'skipped'     => true,
+				),
+				200
+			);
+		}
+
+		// Concurrency lock: only allow one import at a time per runtime.
+		$locked = get_transient( $lock_key );
+		if ( ! empty( $locked ) ) {
+			return new WP_REST_Response(
+				array(
+					'ok'      => false,
+					'message' => 'Runtime busy, try again.',
+				),
+				429
+			);
+		}
+		set_transient( $lock_key, $slug . '|' . (string) time(), 180 );
+
 		// Apply via hmpro-demo-kurulum plugin.
 		if ( ! function_exists( 'hmpro_demo_run_apply' ) ) {
+			delete_transient( $lock_key );
 			return new WP_REST_Response(
 				array(
 					'ok'      => false,
@@ -153,14 +184,20 @@ final class HMPS_Player_API {
 		}
 
 		try {
-            $result = hmpro_demo_run_apply( $slug, array( 'silent' => true, 'replace' => true ) );
+			$result = hmpro_demo_run_apply( $slug, array( 'silent' => true, 'replace' => true ) );
 		} catch ( Exception $e ) {
+			delete_transient( $lock_key );
 			return new WP_REST_Response( array( 'ok' => false, 'message' => $e->getMessage() ), 500 );
 		}
+
+		delete_transient( $lock_key );
 
 		if ( is_wp_error( $result ) ) {
 			return new WP_REST_Response( array( 'ok' => false, 'message' => $result->get_error_message() ), 500 );
 		}
+
+		// mark cooldown after successful apply
+		set_transient( $cooldown_key, time(), $cooldown_seconds );
 
 		return new WP_REST_Response(
 			array(
