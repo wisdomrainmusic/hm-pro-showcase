@@ -7,8 +7,73 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class HMPS_Shortcodes {
 	public static function register() : void {
 		add_shortcode( 'hmps_showcase', array( __CLASS__, 'render_showcase' ) );
+		add_shortcode( 'hmps_demo', array( __CLASS__, 'render_single_demo' ) );
 		// Back-compat alias if you decide to keep old name.
 		add_shortcode( 'hmpro_showcase', array( __CLASS__, 'render_showcase' ) );
+	}
+
+	/**
+	 * Render a single package card (shared by showcase + single demo).
+	 *
+	 * @param array  $p    Package data.
+	 * @param string $slug Package slug.
+	 */
+	private static function render_card( array $p, string $slug ) : void {
+		$title       = isset( $p['title'] ) ? (string) $p['title'] : $slug;
+		$cats        = isset( $p['cats'] ) ? (array) $p['cats'] : ( isset( $p['categories'] ) ? (array) $p['categories'] : array() );
+		$cats_str    = implode( ' ', array_map( 'sanitize_title', $cats ) );
+		$cover_url   = '';
+		if ( isset( $p['cover_url'] ) ) {
+			$cover_url = (string) $p['cover_url'];
+		} elseif ( isset( $p['cover'] ) ) {
+			if ( is_array( $p['cover'] ) ) {
+				$cover_url = (string) ( $p['cover']['url'] ?? '' );
+			} else {
+				$cover_url = (string) $p['cover'];
+			}
+		}
+		$runtime_url = isset( $p['runtime_url'] ) ? (string) $p['runtime_url'] : ( isset( $p['runtime'] ) ? (string) $p['runtime'] : '' );
+		$order       = isset( $p['order'] ) ? (int) $p['order'] : 0;
+
+		?>
+		<article
+			class="hmps-card"
+			role="listitem"
+			data-title="<?php echo esc_attr( mb_strtolower( $title ) ); ?>"
+			data-cats="<?php echo esc_attr( $cats_str ); ?>"
+			data-order="<?php echo esc_attr( (string) $order ); ?>"
+		>
+			<div class="hmps-card-media">
+				<?php if ( $cover_url ) : ?>
+					<img class="hmps-cover" src="<?php echo esc_url( $cover_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy" decoding="async" />
+				<?php else : ?>
+					<div class="hmps-cover hmps-cover--empty" aria-hidden="true"></div>
+				<?php endif; ?>
+			</div>
+
+			<div class="hmps-card-body">
+				<h3 class="hmps-card-title"><?php echo esc_html( $title ); ?></h3>
+
+				<?php if ( ! empty( $cats ) ) : ?>
+					<div class="hmps-card-meta">
+						<?php echo esc_html( implode( ' • ', array_map( 'sanitize_text_field', $cats ) ) ); ?>
+					</div>
+				<?php endif; ?>
+
+				<div class="hmps-actions">
+					<button
+						type="button"
+						class="hmps-preview"
+						data-slug="<?php echo esc_attr( $slug ); ?>"
+						data-cover="<?php echo esc_url( $cover_url ); ?>"
+						<?php if ( $runtime_url ) : ?>
+							data-runtime-url="<?php echo esc_url( $runtime_url ); ?>"
+						<?php endif; ?>
+					>Önizle</button>
+				</div>
+			</div>
+		</article>
+		<?php
 	}
 
 	private static function enqueue_assets() : void {
@@ -102,6 +167,48 @@ final class HMPS_Shortcodes {
 		);
 
 		return $out;
+	}
+
+	/**
+	 * Shortcode: [hmps_demo slug="..."]
+	 * Renders a single package card in "hero" mode (centered + wider).
+	 */
+	public static function render_single_demo( $atts = array() ) : string {
+		self::enqueue_assets();
+
+		$atts = shortcode_atts(
+			array(
+				'slug' => '',
+			),
+			(array) $atts,
+			'hmps_demo'
+		);
+
+		$slug = sanitize_text_field( (string) $atts['slug'] );
+		if ( ! $slug ) {
+			return '';
+		}
+
+		if ( ! class_exists( 'HMPS_Admin' ) ) {
+			require_once HMPS_PLUGIN_DIR . 'inc/admin/class-hmps-admin.php';
+		}
+
+		$settings = HMPS_Admin::get_settings();
+		$repo     = new HMPS_Package_Repository( (string) $settings['packages_base_dir'] );
+		$p        = $repo->get_package( $slug );
+		if ( empty( $p ) ) {
+			return '';
+		}
+
+		ob_start();
+		?>
+		<div class="hmps-single-demo hmps-showcase-root">
+			<div class="hmps-grid" role="list">
+				<?php self::render_card( (array) $p, $slug ); ?>
+			</div>
+		</div>
+		<?php
+		return (string) ob_get_clean();
 	}
 
 	/**
@@ -203,57 +310,9 @@ final class HMPS_Shortcodes {
 				<div class="hmps-grid" role="list">
 					<?php foreach ( $packages as $p ) : ?>
 						<?php
-						$slug  = (string) ( $p['slug'] ?? '' );
-						$title = (string) ( $p['title'] ?? $slug );
-						$desc  = (string) ( $p['description'] ?? '' );
-						$pcats = isset( $p['categories'] ) && is_array( $p['categories'] ) ? $p['categories'] : array();
-						$cats_attr = implode(
-							' ',
-							array_values(
-								array_filter(
-									array_map(
-										static function( $c ) {
-											return sanitize_title( (string) $c );
-										},
-										$pcats
-									)
-								)
-							)
-						);
-						$cover_url = (string) ( $p['cover']['url'] ?? '' );
-						$preview   = '';
+						$slug = isset( $p['slug'] ) ? (string) $p['slug'] : '';
+						self::render_card( (array) $p, $slug );
 						?>
-						<article
-							class="hmps-card"
-							role="listitem"
-							data-title="<?php echo esc_attr( mb_strtolower( $title ) ); ?>"
-							data-cats="<?php echo esc_attr( $cats_attr ); ?>"
-							data-order="0"
-						>
-							<div class="hmps-media" aria-label="<?php echo esc_attr( $title ); ?>">
-								<?php if ( $cover_url ) : ?>
-									<img src="<?php echo esc_url( $cover_url ); ?>" alt="" loading="lazy" />
-								<?php else : ?>
-									<div class="hmps-cover-fallback">Kapak yok</div>
-								<?php endif; ?>
-							</div>
-
-							<div class="hmps-body">
-								<div class="hmps-title"><?php echo esc_html( $title ); ?></div>
-								<?php if ( $desc ) : ?>
-									<div class="hmps-desc"><?php echo esc_html( $desc ); ?></div>
-								<?php endif; ?>
-
-								<div class="hmps-actions">
-									<button
-										type="button"
-										class="hmps-preview"
-										data-slug="<?php echo esc_attr( $slug ); ?>"
-										data-cover="<?php echo esc_url( $cover_url ); ?>"
-									>Önizle</button>
-								</div>
-							</div>
-						</article>
 					<?php endforeach; ?>
 				</div>
 
