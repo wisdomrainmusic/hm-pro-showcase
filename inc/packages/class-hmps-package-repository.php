@@ -157,7 +157,8 @@ final class HMPS_Package_Repository {
 			$cover_file = (string) $data['cover'];
 		}
 
-		$cover = $this->resolve_cover( $dir, $cover_file );
+		$cover  = $this->resolve_cover( $dir, $cover_file );
+		$covers = $this->resolve_covers( $dir, $cover_file );
 
 		$pkg = array(
 			'slug'            => $slug,
@@ -166,6 +167,7 @@ final class HMPS_Package_Repository {
 			'categories'      => $categories,
 			'front_page_slug' => $front_page_slug,
 			'cover'           => $cover,
+			'covers'          => $covers,
 			'paths'           => array(
 				'dir'        => $dir,
 				'demo_json'  => $demo_json,
@@ -175,6 +177,71 @@ final class HMPS_Package_Repository {
 		);
 
 		return HMPS_Package_Schema::normalize( $pkg );
+	}
+
+	/**
+	 * Resolve multiple cover images for a package.
+	 *
+	 * Supports: cover.(webp|jpg|jpeg|png) and cover-2..cover-5.(...)
+	 * If demo.json provides a cover file, it will be preferred as the first item (if exists).
+	 *
+	 * @param string $dir
+	 * @param string $cover_from_json
+	 * @return array<int, string> Array of cover URLs (ordered).
+	 */
+	public function resolve_covers( string $dir, string $cover_from_json = '' ) : array {
+		$dir = wp_normalize_path( untrailingslashit( $dir ) );
+
+		$exts = array( 'webp', 'jpg', 'jpeg', 'png' );
+		$urls = array();
+		$seen = array();
+
+		$slug = basename( $dir );
+		$slug = sanitize_title( $slug );
+		if ( '' === $slug ) {
+			return array();
+		}
+
+		$push = function( string $rel ) use ( &$urls, &$seen, $dir, $slug ) : void {
+			$rel = ltrim( $rel, '/\\' );
+			if ( '' === $rel ) {
+				return;
+			}
+			$abs = $dir . '/' . $rel;
+			if ( ! file_exists( $abs ) || ! is_file( $abs ) ) {
+				return;
+			}
+			if ( isset( $seen[ $rel ] ) ) {
+				return;
+			}
+			$seen[ $rel ] = true;
+			if ( $this->base_url ) {
+				$urls[] = $this->base_url . '/' . rawurlencode( $slug ) . '/' . rawurlencode( $rel );
+			}
+		};
+
+		$cover_from_json = trim( $cover_from_json );
+		if ( '' !== $cover_from_json ) {
+			$push( $cover_from_json );
+		}
+
+		// cover, cover-2..cover-5
+		$bases = array( 'cover', 'cover-2', 'cover-3', 'cover-4', 'cover-5' );
+		foreach ( $bases as $base ) {
+			foreach ( $exts as $ext ) {
+				$push( $base . '.' . $ext );
+			}
+		}
+
+		// If nothing found but legacy resolve_cover finds one, include it.
+		if ( empty( $urls ) ) {
+			$single = $this->resolve_cover( $dir, $cover_from_json );
+			if ( ! empty( $single['url'] ) ) {
+				$urls[] = (string) $single['url'];
+			}
+		}
+
+		return $urls;
 	}
 
 	/**

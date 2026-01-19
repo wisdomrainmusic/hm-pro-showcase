@@ -33,6 +33,14 @@ final class HMPS_Shortcodes {
 			}
 		}
 		$runtime_url = isset( $p['runtime_url'] ) ? (string) $p['runtime_url'] : ( isset( $p['runtime'] ) ? (string) $p['runtime'] : '' );
+		$covers = array();
+		if ( isset( $p['covers'] ) && is_array( $p['covers'] ) ) {
+			$covers = array_values( array_filter( array_map( 'strval', (array) $p['covers'] ) ) );
+		}
+		if ( empty( $covers ) && $cover_url ) {
+			$covers = array( $cover_url );
+		}
+		$covers_json = $covers ? wp_json_encode( $covers ) : '[]';
 		$order       = isset( $p['order'] ) ? (int) $p['order'] : 0;
 
 		?>
@@ -43,9 +51,12 @@ final class HMPS_Shortcodes {
 			data-cats="<?php echo esc_attr( $cats_str ); ?>"
 			data-order="<?php echo esc_attr( (string) $order ); ?>"
 		>
-			<div class="hmps-card-media">
+			<div class="hmps-card-media" data-images="<?php echo esc_attr( (string) $covers_json ); ?>">
 				<?php if ( $cover_url ) : ?>
 					<img class="hmps-cover" src="<?php echo esc_url( $cover_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy" decoding="async" />
+					<button type="button" class="hmps-media-open" aria-label="İncele">İncele</button>
+					<button type="button" class="hmps-media-prev" aria-label="Önceki görsel">‹</button>
+					<button type="button" class="hmps-media-next" aria-label="Sonraki görsel">›</button>
 				<?php else : ?>
 					<div class="hmps-cover hmps-cover--empty" aria-hidden="true"></div>
 				<?php endif; ?>
@@ -69,7 +80,7 @@ final class HMPS_Shortcodes {
 						<?php if ( $runtime_url ) : ?>
 							data-runtime-url="<?php echo esc_url( $runtime_url ); ?>"
 						<?php endif; ?>
-					>Önizle</button>
+					>Canlı Önizle</button>
 				</div>
 			</div>
 		</article>

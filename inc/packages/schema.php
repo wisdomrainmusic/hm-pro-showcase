@@ -25,6 +25,7 @@ final class HMPS_Package_Schema {
 				'file' => '',
 				'url'  => '',
 			),
+			'covers'          => array(),
 			'paths'           => array(
 				'dir'        => '',
 				'demo_json'  => '',
@@ -59,6 +60,20 @@ final class HMPS_Package_Schema {
 		}
 		$out['cover']['file'] = (string) ( $out['cover']['file'] ?? '' );
 		$out['cover']['url']  = (string) ( $out['cover']['url'] ?? '' );
+
+		if ( ! is_array( $out['covers'] ) ) {
+			$out['covers'] = array();
+		}
+		$out['covers'] = array_values(
+			array_filter(
+				array_map(
+					static function( $u ) {
+						return is_string( $u ) ? trim( $u ) : '';
+					},
+					$out['covers']
+				)
+			)
+		);
 
 		return $out;
 	}
