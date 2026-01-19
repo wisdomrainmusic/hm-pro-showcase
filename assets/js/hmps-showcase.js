@@ -116,13 +116,11 @@
       return 'rt1';
     }
 
-    function writeWindowLoading(w, slug){
+    function writeWindowLoading(w, slug, coverUrl){
       try {
         var cover = '';
         try {
-          if (window.HMPS_SHOWCASE && window.HMPS_SHOWCASE.coverUrl) {
-            cover = String(window.HMPS_SHOWCASE.coverUrl);
-          }
+          if (coverUrl) cover = String(coverUrl);
         } catch(e) {}
 
         w.document.open();
@@ -209,6 +207,7 @@
     qsa(root, '.hmps-preview').forEach(function(btn){
       btn.addEventListener('click', function(){
         var slug = btn.getAttribute('data-slug') || '';
+        var cover = btn.getAttribute('data-cover') || '';
         if(!slug) return;
 
         // Popup-proof: open immediately on click.
@@ -218,7 +217,7 @@
         } catch(e) { w = null; }
 
         if(w){
-          writeWindowLoading(w, slug);
+          writeWindowLoading(w, slug, cover);
         }
 
         requestPreview(slug, w);

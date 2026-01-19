@@ -222,7 +222,12 @@ final class HMPS_Shortcodes {
 								<?php endif; ?>
 
 								<div class="hmps-actions">
-									<button type="button" class="hmps-preview" data-slug="<?php echo esc_attr( $slug ); ?>">Önizle</button>
+									<button
+										type="button"
+										class="hmps-preview"
+										data-slug="<?php echo esc_attr( $slug ); ?>"
+										data-cover="<?php echo esc_url( $cover_url ); ?>"
+									>Önizle</button>
 								</div>
 							</div>
 						</article>
