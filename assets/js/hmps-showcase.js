@@ -368,19 +368,33 @@
       try {
         if(window.HMPS_SHOWCASE && Array.isArray(window.HMPS_SHOWCASE.runtimeKeys) && window.HMPS_SHOWCASE.runtimeKeys.length){
           var keys = window.HMPS_SHOWCASE.runtimeKeys.slice(0);
-          var idx = 0;
-          try {
-            idx = parseInt(window.localStorage.getItem(RR_KEY) || '0', 10);
-            if(isNaN(idx) || idx < 0) idx = 0;
-          } catch(e) { idx = 0; }
+          // Some environments (privacy modes / strict settings) can block localStorage.
+          // We fall back to sessionStorage, and finally an in-memory counter.
+          function getIdx(){
+            var n = 0;
+            try {
+              n = parseInt(window.localStorage.getItem(RR_KEY) || '0', 10);
+              if(!isNaN(n) && n >= 0) return n;
+            } catch(e) {}
+            try {
+              n = parseInt(window.sessionStorage.getItem(RR_KEY) || '0', 10);
+              if(!isNaN(n) && n >= 0) return n;
+            } catch(e) {}
+            if(typeof window.__HMPS_RR_IDX === 'number' && window.__HMPS_RR_IDX >= 0){
+              return window.__HMPS_RR_IDX;
+            }
+            return 0;
+          }
 
+          function setIdx(n){
+            try { window.localStorage.setItem(RR_KEY, String(n)); } catch(e) {}
+            try { window.sessionStorage.setItem(RR_KEY, String(n)); } catch(e) {}
+            window.__HMPS_RR_IDX = n;
+          }
+
+          var idx = getIdx();
           var pick = keys[idx % keys.length];
-
-          // advance
-          try {
-            window.localStorage.setItem(RR_KEY, String((idx + 1) % keys.length));
-          } catch(e) {}
-
+          setIdx((idx + 1) % keys.length);
           return pick;
         }
       } catch(e){}
