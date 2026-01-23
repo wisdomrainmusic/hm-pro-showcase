@@ -116,12 +116,40 @@ final class HMPS_Admin {
 		$dir = isset( $merged['packages_base_dir'] ) ? (string) $merged['packages_base_dir'] : '';
 		$dir = wp_normalize_path( trim( $dir ) );
 
+		// --- Packages directory migration / fallback ---
+		// Older builds used "hmps-packages" under uploads. New standard is "hmpro-demo-packages".
+		$uploads   = wp_upload_dir();
+		$base      = isset( $uploads['basedir'] ) ? (string) $uploads['basedir'] : ( WP_CONTENT_DIR . '/uploads' );
+		$base      = wp_normalize_path( $base );
+		$preferred = trailingslashit( $base ) . 'hmpro-demo-packages';
+		$legacy    = trailingslashit( $base ) . 'hmps-packages';
+		$preferred = wp_normalize_path( $preferred );
+		$legacy    = wp_normalize_path( $legacy );
+
+		$dir_has_packages = static function ( string $path ) : bool {
+			$path = wp_normalize_path( $path );
+			if ( '' === $path || ! is_dir( $path ) ) {
+				return false;
+			}
+			// Demo packages are folders containing a demo.json descriptor.
+			return ! empty( glob( trailingslashit( $path ) . '*/demo.json' ) );
+		};
+
 		if ( empty( $dir ) || ! is_dir( $dir ) ) {
-			$uploads = wp_upload_dir();
-			$base    = isset( $uploads['basedir'] ) ? $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
-			$merged['packages_base_dir'] = trailingslashit( wp_normalize_path( $base ) ) . 'hmpro-demo-packages';
+			// No valid directory configured: default to preferred.
+			$merged['packages_base_dir'] = $preferred;
 		} else {
 			$merged['packages_base_dir'] = $dir;
+		}
+
+		// If we're pointing to the legacy dir, but preferred exists and actually has packages, switch.
+		if ( $legacy === wp_normalize_path( (string) $merged['packages_base_dir'] ) && $dir_has_packages( $preferred ) ) {
+			$merged['packages_base_dir'] = $preferred;
+		}
+
+		// If current dir has no packages but preferred does, prefer preferred.
+		if ( ! $dir_has_packages( (string) $merged['packages_base_dir'] ) && $dir_has_packages( $preferred ) ) {
+			$merged['packages_base_dir'] = $preferred;
 		}
 
 		// Ensure directory exists (safe no-op if already exists).
