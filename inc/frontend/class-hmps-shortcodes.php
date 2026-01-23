@@ -315,7 +315,20 @@ final class HMPS_Shortcodes {
 
 			<?php if ( empty( $packages ) ) : ?>
 				<div class="hmps-empty">
-					Henüz demo paketi bulunamadı. Lütfen uploads/hmps-packages altına bir paket ekleyin.
+					<?php
+					// Hint path: show "uploads/<dir>" if the configured base dir is within uploads.
+					$uploads   = wp_upload_dir();
+					$uploads_d = isset( $uploads['basedir'] ) ? wp_normalize_path( $uploads['basedir'] ) : wp_normalize_path( WP_CONTENT_DIR . '/uploads' );
+					$base_dir  = isset( $settings['packages_base_dir'] ) ? wp_normalize_path( (string) $settings['packages_base_dir'] ) : '';
+					$hint_dir  = 'uploads/hmpro-demo-packages';
+					if ( $base_dir && 0 === strpos( $base_dir, $uploads_d ) ) {
+						$rel      = ltrim( substr( $base_dir, strlen( $uploads_d ) ), '/\\' );
+						$hint_dir = 'uploads/' . ( $rel ? $rel : 'hmpro-demo-packages' );
+					} elseif ( $base_dir ) {
+						$hint_dir = $base_dir;
+					}
+					echo esc_html( sprintf( 'Henüz demo paketi bulunamadı. Lütfen %s altına bir paket ekleyin.', $hint_dir ) );
+					?>
 				</div>
 			<?php else : ?>
 				<div class="hmps-grid" role="list">
