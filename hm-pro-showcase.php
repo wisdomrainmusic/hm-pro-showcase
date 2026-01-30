@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HM Pro Showcase
  * Description: Showcase library UI (category tabs + search) for HM Pro theme demo packages.
- * Version: 0.4.1
+ * Version: 0.4.2
  * Author: Wisdom Rain Music
  * License: GPLv2 or later
  * Text Domain: hm-pro-showcase
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HMPS_VERSION', '0.4.1' );
+define( 'HMPS_VERSION', '0.4.2' );
 define( 'HMPS_PLUGIN_FILE', __FILE__ );
 define( 'HMPS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HMPS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

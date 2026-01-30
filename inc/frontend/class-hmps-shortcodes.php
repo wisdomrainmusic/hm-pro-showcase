@@ -5,6 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 final class HMPS_Shortcodes {
+	/**
+	 * Cached map of category slug => label.
+	 *
+	 * @var array<string, string>|null
+	 */
+	private static $cat_label_map = null;
 	public static function register() : void {
 		add_shortcode( 'hmps_showcase', array( __CLASS__, 'render_showcase' ) );
 		add_shortcode( 'hmps_demo', array( __CLASS__, 'render_single_demo' ) );
@@ -19,7 +25,24 @@ final class HMPS_Shortcodes {
 	 * @param string $slug Package slug.
 	 */
 	private static function render_card( array $p, string $slug ) : void {
-		$title       = isset( $p['title'] ) ? (string) $p['title'] : $slug;
+		$title       = isset( $p['title'] ) ? (string) $p['title'] : '';
+		$slug_in    = sanitize_title( $slug );
+		if ( '' === $slug_in && isset( $p['slug'] ) ) {
+			$slug_in = sanitize_title( (string) $p['slug'] );
+		}
+		$title_raw  = isset( $p['title'] ) ? (string) $p['title'] : '';
+		$title      = trim( $title_raw );
+
+		// Robust fallback: if title is missing OR looks like a slug (e.g. kadin-giyim-demo-1-soft-rose), show a human label.
+		$title_is_sluglike = ( '' !== $title ) && ( sanitize_title( $title ) === $title );
+		if ( '' === $title || $title_is_sluglike ) {
+			$base = $slug_in ? $slug_in : sanitize_title( $title_raw );
+			$title = $base ? self::slug_to_label( $base ) : (string) $title_raw;
+		}
+		if ( '' === trim( $title ) ) {
+			$title = $slug_in ? $slug_in : (string) $slug;
+		}
+		$description = isset( $p['description'] ) ? (string) $p['description'] : '';
 		$cats        = isset( $p['cats'] ) ? (array) $p['cats'] : ( isset( $p['categories'] ) ? (array) $p['categories'] : array() );
 		$cats_str    = implode( ' ', array_map( 'sanitize_title', $cats ) );
 		$cover_url   = '';
@@ -67,7 +90,24 @@ final class HMPS_Shortcodes {
 
 				<?php if ( ! empty( $cats ) ) : ?>
 					<div class="hmps-card-meta">
-						<?php echo esc_html( implode( ' • ', array_map( 'sanitize_text_field', $cats ) ) ); ?>
+						<?php
+						$map          = self::get_category_label_map();
+						$cats_display = array();
+						foreach ( $cats as $c ) {
+							$cs = sanitize_title( (string) $c );
+							if ( '' === $cs ) {
+								continue;
+							}
+							$cats_display[] = $map[ $cs ] ?? self::slug_to_label( $cs );
+						}
+						echo esc_html( implode( ' • ', array_map( 'sanitize_text_field', $cats_display ) ) );
+						?>
+					</div>
+				<?php endif; ?>
+
+				<?php if ( '' !== trim( $description ) ) : ?>
+					<div class="hmps-card-desc">
+						<?php echo wp_kses_post( wpautop( $description ) ); ?>
 					</div>
 				<?php endif; ?>
 
@@ -133,6 +173,34 @@ final class HMPS_Shortcodes {
 		}
 		$label = str_replace( array( '-', '_' ), ' ', $slug );
 		return ucwords( $label );
+	}
+
+	/**
+	 * Get category label map (slug => label). Uses admin settings if available.
+	 *
+	 * @return array<string, string>
+	 */
+	private static function get_category_label_map() : array {
+		if ( null !== self::$cat_label_map ) {
+			return self::$cat_label_map;
+		}
+		self::$cat_label_map = array();
+		if ( ! class_exists( 'HMPS_Admin' ) ) {
+			require_once HMPS_PLUGIN_DIR . 'inc/admin/class-hmps-admin.php';
+		}
+		$dict = HMPS_Admin::get_category_dict();
+		foreach ( (array) $dict as $slug => $row ) {
+			$slug_final = sanitize_title( (string) ( $row['slug'] ?? $slug ) );
+			if ( '' === $slug_final ) {
+				continue;
+			}
+			$label_final = (string) ( $row['label'] ?? '' );
+			if ( '' === trim( $label_final ) ) {
+				$label_final = self::slug_to_label( $slug_final );
+			}
+			self::$cat_label_map[ $slug_final ] = $label_final;
+		}
+		return self::$cat_label_map;
 	}
 
 	private static function get_enabled_categories() : array {

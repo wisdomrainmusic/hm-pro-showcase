@@ -148,6 +148,32 @@
   transition:transform .18s ease, box-shadow .18s ease;
 }
 
+.hmps-showcase-root .hmps-card-body{
+  padding:18px;
+}
+
+.hmps-showcase-root .hmps-card-title{
+  margin:0 0 8px;
+  font-size:28px;
+  line-height:1.15;
+}
+
+.hmps-showcase-root .hmps-card-meta{
+  color:rgba(0,0,0,.55);
+  font-size:14px;
+  margin-bottom:10px;
+}
+
+.hmps-showcase-root .hmps-card-desc{
+  color:rgba(0,0,0,.78);
+  font-size:16px;
+  line-height:1.45;
+  margin:0 0 16px;
+}
+
+.hmps-showcase-root .hmps-card-desc p{ margin:0 0 10px; }
+.hmps-showcase-root .hmps-card-desc p:last-child{ margin-bottom:0; }
+
 .hmps-showcase-root .hmps-card-media{
   display:block;
   position:relative;
@@ -301,24 +327,6 @@
   opacity:.7;
   font-size:14px;
   background:#f3f3f3;
-}
-
-.hmps-showcase-root .hmps-card-body{
-  padding:14px 14px 16px 14px;
-}
-
-.hmps-showcase-root .hmps-card-title{
-  font-size:16px;
-  font-weight:700;
-  margin-bottom:6px;
-}
-
-.hmps-showcase-root .hmps-card-meta{
-  font-size:13px;
-  opacity:.78;
-  line-height:1.4;
-  margin-bottom:12px;
-  min-height: 18px;
 }
 
 .hmps-showcase-root .hmps-actions{margin-top:12px;display:flex;gap:10px;}
