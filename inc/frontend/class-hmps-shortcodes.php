@@ -300,6 +300,7 @@ final class HMPS_Shortcodes {
 			array(
 				'per_page' => 12,
 				'paging'   => 'loadmore', // loadmore | pagination
+				'cat'      => '', // optional: kadin-giyim, erkek-giyim, etc. (empty = all)
 			),
 			(array) $atts,
 			'hmps_showcase'
@@ -321,6 +322,21 @@ final class HMPS_Shortcodes {
 		$settings = HMPS_Admin::get_settings();
 		$repo     = new HMPS_Package_Repository( (string) $settings['packages_base_dir'] );
 		$packages = $repo->list_packages();
+
+		// Optional: server-side filter packages by category slug.
+		$requested_cat = sanitize_title( (string) $atts['cat'] );
+		if ( '' !== $requested_cat && 'all' !== $requested_cat ) {
+			$packages = array_values(
+				array_filter(
+					$packages,
+					static function ( $p ) use ( $requested_cat ) {
+						$pcats = isset( $p['categories'] ) && is_array( $p['categories'] ) ? $p['categories'] : array();
+						$pcats = array_map( 'sanitize_title', array_map( 'strval', $pcats ) );
+						return in_array( $requested_cat, $pcats, true );
+					}
+				)
+			);
+		}
 
 		$cats = self::get_enabled_categories();
 
@@ -346,8 +362,8 @@ final class HMPS_Shortcodes {
 			}
 		}
 
-		// Decide default category: first enabled category, else all.
-		$default_cat = ! empty( $cats ) ? (string) $cats[0]['slug'] : 'all';
+		// Decide default category: prefer requested cat, else first enabled, else all.
+		$default_cat = ( '' !== $requested_cat && 'all' !== $requested_cat ) ? $requested_cat : ( ! empty( $cats ) ? (string) $cats[0]['slug'] : 'all' );
 
 		ob_start();
 		?>
